@@ -6,7 +6,7 @@
 - npm
 - A Supabase project (free tier is fine)
 - A GitHub OAuth app
-- Supabase CLI (for running migrations locally or against your project)
+- Supabase CLI (for migrations and the seed)
 
 ## 1. Install dependencies
 
@@ -33,6 +33,11 @@ npm install
    - Site URL: `http://localhost:3000`
    - Redirect URLs: `http://localhost:3000/auth/callback`
 
+The app requests only identity scopes: `read:user user:email`. It deliberately
+does **not** request `repo` or `public_repo`. Public commit and merged-PR activity
+is read through the GitHub Search API without repository scopes. Private
+repository activity is out of scope for this version.
+
 ## 4. Environment variables
 
 Copy the example file and fill in your values:
@@ -46,25 +51,45 @@ NEXT_PUBLIC_SUPABASE_URL=https://<project-ref>.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon-key>
 SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
+# Required for GitHub activity sync. Base64-encoded 32-byte key.
+GITHUB_TOKEN_ENCRYPTION_KEY=<generate-below>
+
+# Optional. Defaults to 10 (10 × 100 = the GitHub Search API 1,000-result cap).
+GITHUB_SYNC_MAX_PAGES=10
 ```
 
-> `SUPABASE_SERVICE_ROLE_KEY` is used only server-side for profile bootstrap.
-> It is never imported into client code (guarded by `server-only`).
+Generate the encryption key:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+```
+
+> `SUPABASE_SERVICE_ROLE_KEY` and `GITHUB_TOKEN_ENCRYPTION_KEY` are server-only.
+> The service role is used for profile bootstrap and encrypted token storage.
+> The encryption key never leaves the server.
 
 ## 5. Apply migrations and seed data
 
-Link the Supabase CLI to your project, then push the schema:
+Link the Supabase CLI to your project, then push the schema and data migrations:
 
 ```bash
 supabase link --project-ref <project-ref>
 supabase db push
 ```
 
-Apply the seed data (sample quests and cosmetics). You can run `supabase/seed.sql`
-in the Supabase SQL editor, or:
+`db push` applies:
+
+- `001_initial_schema.sql` — profiles, quests/completions, cosmetics.
+- `002_activity.sql` — activity tables, RLS, encrypted token storage, and the
+  SQL-authoritative `record_activity_events` / `evaluate_activity_quests` functions.
+- `003_activity_quests.sql` — the nine all-time activity quests (idempotent).
+
+Apply the seed (cosmetics and a re-runnable copy of the quest catalog). Run
+`supabase/seed.sql` in the Supabase SQL editor, or:
 
 ```bash
-supabase db execute --file supabase/seed.sql
+supabase db query --linked -f supabase/seed.sql
 ```
 
 If you prefer a fully local stack:
@@ -80,7 +105,8 @@ supabase db reset   # applies migrations + seed.sql
 npm run dev
 ```
 
-Open http://localhost:3000 and sign in with GitHub.
+Open http://localhost:3000 and sign in with GitHub. After signing in, open
+**Quests** and press **Sync GitHub** to import public commits and merged PRs.
 
 ## 7. Checks
 
@@ -96,19 +122,58 @@ Authenticated Playwright journeys require a configured Supabase project and a
 test GitHub account; run them against a deployed/preview environment using
 `PLAYWRIGHT_BASE_URL`.
 
+## Activity sync behavior
+
+- **User-triggered only.** There are no webhooks, background workers, or scheduled
+  jobs. The user presses **Sync GitHub**.
+- **Public activity only.** The GitHub Search API is queried for commits authored
+  by the user and merged PRs authored by the user.
+- **Bots and merges.** Bot-authored activity is dropped. Merge commits are stored
+  but excluded from commit quests. Merged PRs are counted separately.
+- **All-time milestones.** Seeded quests use `window_days = NULL`, so milestones
+  count the user's entire public history. The schema supports windowed quests.
+- **Incremental sync.** After the first sync, the next query starts one day before
+  the last successful sync to absorb late-arriving activity. Events are deduplicated
+  by `(user_id, activity_type, external_id)`.
+- **Search cap.** GitHub Search returns at most 1,000 results per query. With
+  `GITHUB_SYNC_MAX_PAGES=10` and 100 results per page, the app fetches exactly that
+  cap. Hitting the cap marks the affected history incomplete; progress can be
+  `indeterminate`, but it never falsely completes a quest.
+- **Rate limits.** GitHub Search allows 30 authenticated requests per minute. On a
+  rate limit the UI shows the reset time in the user's local timezone. There are no
+  automatic retries; the user can try again later.
+- **Truncated history.** `quest_progress.status = 'indeterminate'` is used when a
+  milestone cannot be confirmed because history is incomplete. It is never treated
+  as completed.
+
 ## Data model & integrity
 
 - `profiles` — one row per auth user; XP, coins, equipped border.
 - `quests` / `quest_completions` — one-time quests; unique `(user_id, quest_id)`.
-- `cosmetics` / `user_cosmetics` — shop catalog and ownership; unique `(user_id, cosmetic_id)`.
+- `cosmetics` / `user_cosmetics` — shop catalog and ownership; unique
+  `(user_id, cosmetic_id)`.
+- `github_connections` — public GitHub identity, sync status, and history flags.
+- `github_oauth_tokens` — AES-256-GCM ciphertext; no client grants or RLS policies.
+- `github_activity_events` — normalized, deduplicated commits and merged PRs.
+- `quest_progress` — per-user progress snapshot (`in_progress`, `completed`,
+  `indeterminate`).
+- `github_sync_runs` — one audit row per user-triggered sync.
 
-Rewards and purchases go through `SECURITY DEFINER` Postgres functions
-(`complete_quest`, `purchase_cosmetic`, `equip_cosmetic`) that derive the acting
-user from `auth.uid()`. Clients can read their own rows via RLS but cannot write
-XP, coins, completion, ownership, or equip state directly.
+Rewards are evaluated in SQL. `record_activity_events` and
+`evaluate_activity_quests` are `SECURITY DEFINER`, derive the acting user from
+`auth.uid()`, and are callable only by authenticated users. `evaluate_activity_quests`
+recomputes progress and awards each quest at most once using the unique
+`(user_id, quest_id)` constraint. The manual `complete_quest` function has been
+removed. Shop purchases and equips still use `purchase_cosmetic` and
+`equip_cosmetic`.
+
+Clients can read their own rows via RLS but cannot write XP, coins, completions,
+ownership, activity, progress, or equip state directly.
 
 ## Deployment
 
 Deploy to Vercel (or any Node host). Set the same environment variables in the
-host dashboard, and add the production callback URL
-`https://<your-domain>/auth/callback` to Supabase redirect URLs.
+host dashboard, including `GITHUB_TOKEN_ENCRYPTION_KEY` (use a different key per
+environment), and add the production callback URL
+`https://<your-domain>/auth/callback` to Supabase redirect URLs. Run
+`supabase db push` against the production project before deploying.

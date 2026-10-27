@@ -15,6 +15,9 @@ export async function signInWithGitHub() {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'github',
     options: {
+      // Identity only. Public activity is read via the GitHub API without
+      // repository scopes; private repository activity does not count in v1.
+      scopes: 'read:user user:email',
       redirectTo: `${origin}/auth/callback`,
     },
   })

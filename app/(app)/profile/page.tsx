@@ -1,11 +1,14 @@
 import { requireSession } from '@/lib/auth/session'
+import { signInWithGitHub } from '@/lib/auth/actions'
 import { getProfileOverview } from '@/lib/profile/queries'
 import { AvatarWithBorder } from '@/components/avatar-with-border'
+import { LocalTime } from '@/components/local-time'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default async function ProfilePage() {
   const { profile } = await requireSession()
-  const { equipped, questsCompleted, progression } = await getProfileOverview(profile)
+  const { equipped, questsCompleted, progression, github } = await getProfileOverview(profile)
 
   const { level, totalXp, xpIntoLevel, xpForNextLevel, progressRatio } = progression
   const percent = Math.round(progressRatio * 100)
@@ -70,6 +73,35 @@ export default async function ProfilePage() {
           </CardContent>
         </Card>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">GitHub activity</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-wrap items-center justify-between gap-3 text-sm">
+          <div className="text-muted-foreground">
+            {github?.last_synced_at ? (
+              <>
+                Last synced <LocalTime iso={github.last_synced_at} />
+              </>
+            ) : (
+              'Not synced yet'
+            )}
+          </div>
+
+          {!github || github.needs_reauth ? (
+            <form action={signInWithGitHub}>
+              <Button type="submit" size="sm">
+                Reconnect GitHub
+              </Button>
+            </form>
+          ) : (
+            <span className="text-xs text-muted-foreground">
+              Public activity only · sync from Quests
+            </span>
+          )}
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>
