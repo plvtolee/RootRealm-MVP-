@@ -30,7 +30,7 @@ migrations, activity-sync behavior, checks, and deployment.
   quests completed, and GitHub sync status.
 - **Shop** — browse avatar borders, purchase, equip, unequip.
 - **Quests** — activity-driven milestones with progress, XP + coin rewards, and
-  an explicit **Sync GitHub** action.
+  automatic sync on load plus a manual **Sync GitHub** action.
 
 ## How quests work
 
@@ -41,6 +41,8 @@ Quests are evaluated from real public GitHub activity, not manual completion:
 - Bot activity is ignored; merge commits are excluded from commit quests.
 - Seeded quests are all-time milestones. The schema supports windowed quests.
 - Evaluation is SQL-authoritative and awards each quest exactly once.
+- Activity syncs automatically when an authenticated page loads (at most once
+  every 10 minutes); the **Sync GitHub** button forces an immediate sync.
 - If GitHub's 1,000-result search cap truncates history, affected quests show
   `indeterminate` instead of falsely completing.
 

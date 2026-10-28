@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import type { EvaluateQuestRow, GitHubConnection, QuestProgressStatus } from '@/lib/types';
 import { searchCommits, searchMergedPullRequests } from './client';
+import { isSyncStale } from './cooldown';
 import { GitHubApiError, toGitHubApiError } from './errors';
 import {
   loadDecryptedToken,
@@ -43,7 +44,13 @@ export interface SyncResult {
   ok: boolean;
   reason?: 'needs_reauth' | 'rate_limited' | 'error';
   message: string;
+  skipped?: boolean;
   summary?: SyncSummary;
+}
+
+export interface SyncOptions {
+  /** Bypass the auto-sync cooldown (used by the manual Sync button). */
+  force?: boolean;
 }
 
 function pickRateLimit(
@@ -81,7 +88,10 @@ function asNumber(value: unknown): number {
  * happen through `record_activity_events` and `evaluate_activity_quests`,
  * which derive the user from `auth.uid()` and are SQL-authoritative.
  */
-export async function syncUserActivity(userId: string): Promise<SyncResult> {
+export async function syncUserActivity(
+  userId: string,
+  options: SyncOptions = {}
+): Promise<SyncResult> {
   const startedAt = new Date();
   const admin = createAdminClient();
 
@@ -97,6 +107,15 @@ export async function syncUserActivity(userId: string): Promise<SyncResult> {
       ok: false,
       reason: 'needs_reauth',
       message: 'Please sign in with GitHub again to enable activity sync.',
+    };
+  }
+
+  // Background syncs are paced; the manual button passes force: true.
+  if (!options.force && !isSyncStale(connection.last_synced_at)) {
+    return {
+      ok: true,
+      skipped: true,
+      message: 'Already synced recently.',
     };
   }
 

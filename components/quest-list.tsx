@@ -58,7 +58,7 @@ export function QuestList({ quests, lastSyncedAt, needsReauth }: QuestListProps)
   function handleSync() {
     setFeedback(null);
     startTransition(async () => {
-      const result = await syncGithubActivity();
+      const result = await syncGithubActivity({ force: true });
 
       if (result.ok) {
         const summary = result.summary;

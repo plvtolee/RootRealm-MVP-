@@ -127,8 +127,10 @@ test GitHub account; run them against a deployed/preview environment using
 
 ## Activity sync behavior
 
-- **User-triggered only.** There are no webhooks, background workers, or scheduled
-  jobs. The user presses **Sync GitHub**.
+- **User-triggered and on-load sync.** There are no webhooks, background workers, or
+  scheduled jobs. The app syncs automatically when an authenticated page loads,
+  at most once every 10 minutes. The **Sync GitHub** button forces an immediate
+  sync regardless of the cooldown.
 - **Public activity only.** The GitHub Search API is queried for commits authored
   by the user and merged PRs authored by the user.
 - **Bots and merges.** Bot-authored activity is dropped. Merge commits are stored
