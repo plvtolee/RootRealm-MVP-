@@ -84,6 +84,9 @@ supabase db push
 - `002_activity.sql` — activity tables, RLS, encrypted token storage, and the
   SQL-authoritative `record_activity_events` / `evaluate_activity_quests` functions.
 - `003_activity_quests.sql` — the nine all-time activity quests (idempotent).
+- `004_reconcile_legacy_completions.sql` — removes pre-activity manual
+  completions, subtracts their rewards, and clears derived progress. The next
+  sync rebuilds progress from real GitHub activity.
 
 Apply the seed (cosmetics and a re-runnable copy of the quest catalog). Run
 `supabase/seed.sql` in the Supabase SQL editor, or:
