@@ -6,6 +6,8 @@ import type {
   QuestProgressStatus,
 } from '@/lib/types';
 import type { Progression } from '@/lib/progression';
+import { rarityMeta } from '@/lib/cosmetics/rarity';
+import { cosmeticVisual } from '@/lib/cosmetics/visuals';
 import type {
   EquippedCosmetic,
   GitHubUiStatus,
@@ -21,13 +23,6 @@ const NUMBER_FORMAT = new Intl.NumberFormat('en-US');
 
 const COSMETIC_TYPE_LABELS: Record<string, string> = {
   avatar_border: 'AVATAR BORDER',
-};
-
-const COSMETIC_ICONS: Record<string, string> = {
-  basic: '◇',
-  silver: '◈',
-  gold: '✧',
-  neon: '⌁',
 };
 
 /**
@@ -91,17 +86,24 @@ export function toPhase2Cosmetics(
   cosmetics: CosmeticAdapterInput[]
 ): RootRealmCosmetic[] {
   return cosmetics.map((item) => {
+    const meta = rarityMeta(item.rarity);
+    const visual = cosmeticVisual(item.preview_value);
     const action = item.equipped ? 'equipped' : item.owned ? 'equip' : 'purchase';
 
     return {
       id: item.id,
       name: item.name,
       kind: cosmeticTypeLabel(item.cosmetic_type),
-      tier: item.preview_value.toUpperCase(),
+      category: item.category,
+      rarity: item.rarity,
+      rarityLabel: meta.label,
       description: item.description,
-      icon: cosmeticIcon(item.preview_value),
+      icon: visual.glyph,
       cost: item.price,
       previewValue: item.preview_value,
+      composition: visual.composition,
+      isExclusive: item.is_exclusive,
+      owned: item.owned,
       action,
       actionLabel:
         action === 'equipped' ? 'Equipped' : action === 'equip' ? 'Equip' : 'Purchase',
@@ -216,8 +218,11 @@ export function toPhase2Profile(
         {
           name: equipped.name,
           kind: cosmeticTypeLabel(equipped.cosmetic_type),
-          icon: cosmeticIcon(equipped.preview_value),
+          icon: cosmeticVisual(equipped.preview_value).glyph,
           cosmeticId: equipped.preview_value,
+          rarity: equipped.rarity,
+          category: equipped.category,
+          composition: cosmeticVisual(equipped.preview_value).composition,
         },
       ]
     : [{ name: 'Default frame', kind: 'AVATAR BORDER', icon: '◇' }];
@@ -228,6 +233,7 @@ export function toPhase2Profile(
     avatarInitial: profileInitial(profile.username),
     avatarUrl: profile.avatar_url,
     avatarFrameId: equipped?.preview_value,
+    avatarComposition: equipped ? cosmeticVisual(equipped.preview_value).composition : undefined,
     level: progression.level,
     rank: 'DEVELOPER',
     xp: progression.totalXp,
@@ -268,9 +274,7 @@ function cosmeticTypeLabel(type: string): string {
   return COSMETIC_TYPE_LABELS[type] ?? type.replaceAll('_', ' ').toUpperCase();
 }
 
-function cosmeticIcon(previewValue: string): string {
-  return COSMETIC_ICONS[previewValue] ?? '✦';
-}
+
 
 function profileInitial(username: string): string {
   return username.trim().slice(0, 1).toUpperCase() || '?';

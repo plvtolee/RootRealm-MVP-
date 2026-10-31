@@ -57,6 +57,12 @@ GITHUB_TOKEN_ENCRYPTION_KEY=<generate-below>
 
 # Optional. Defaults to 10 (10 × 100 = the GitHub Search API 1,000-result cap).
 GITHUB_SYNC_MAX_PAGES=10
+
+# Required to designate the RootRealm creator. Set this to the creator's
+# RootRealm username (which defaults to their GitHub login). The Creator
+# Exclusive cosmetic ("The Root Cipher") is granted to this account and can
+# never be purchased through the Shop.
+ROOTREALM_CREATOR_USERNAME=<creator-username>
 ```
 
 Generate the encryption key:
@@ -65,9 +71,11 @@ Generate the encryption key:
 node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 ```
 
-> `SUPABASE_SERVICE_ROLE_KEY` and `GITHUB_TOKEN_ENCRYPTION_KEY` are server-only.
-> The service role is used for profile bootstrap and encrypted token storage.
-> The encryption key never leaves the server.
+> `SUPABASE_SERVICE_ROLE_KEY`, `GITHUB_TOKEN_ENCRYPTION_KEY`, and
+> `ROOTREALM_CREATOR_USERNAME` are server-only. The service role is used for
+> profile bootstrap, encrypted token storage, and granting the Creator
+> Exclusive cosmetic. The creator username is never exposed to the client — only
+> the derived `isCreator` boolean reaches the Shop.
 
 ## 5. Apply migrations and seed data
 
@@ -87,6 +95,10 @@ supabase db push
 - `004_reconcile_legacy_completions.sql` — removes pre-activity manual
   completions, subtracts their rewards, and clears derived progress. The next
   sync rebuilds progress from real GitHub activity.
+- `008_cosmetic_collection.sql` — adds the five-tier rarity system, presentation
+  categories, and the Creator Exclusive flag, then (re)loads the 13-item
+  "Genesis Codex" collection. Existing cosmetic ids are preserved; the Creator
+  Exclusive is made unpurchasable in `purchase_cosmetic`.
 
 Apply the seed (cosmetics and a re-runnable copy of the quest catalog). Run
 `supabase/seed.sql` in the Supabase SQL editor, or:
@@ -156,7 +168,10 @@ test GitHub account; run them against a deployed/preview environment using
 - `profiles` — one row per auth user; XP, coins, equipped border.
 - `quests` / `quest_completions` — one-time quests; unique `(user_id, quest_id)`.
 - `cosmetics` / `user_cosmetics` — shop catalog and ownership; unique
-  `(user_id, cosmetic_id)`.
+  `(user_id, cosmetic_id)`. Each cosmetic carries a `rarity`
+  (common/rare/epic/legendary/mythical), a presentation `category`, and an
+  `is_exclusive` flag. Creator Exclusive items are never purchasable; ownership
+  is granted to the configured `ROOTREALM_CREATOR_USERNAME` account.
 - `github_connections` — public GitHub identity, sync status, and history flags.
 - `github_oauth_tokens` — AES-256-GCM ciphertext; no client grants or RLS policies.
 - `github_activity_events` — normalized, deduplicated commits and merged PRs.

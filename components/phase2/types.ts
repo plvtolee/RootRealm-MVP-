@@ -1,3 +1,5 @@
+import type { CosmeticComposition, CosmeticRarity } from '@/lib/types';
+
 /**
  * Phase 2 presentation types.
  *
@@ -46,6 +48,9 @@ export interface EquippedCosmetic {
   icon: string;
   /** Phase 1 `preview_value`, used for the cosmetic-specific accent CSS. */
   cosmeticId?: string;
+  rarity?: CosmeticRarity;
+  category?: string;
+  composition?: CosmeticComposition;
 }
 
 /** Identity + currency shown in the persistent top bar. */
@@ -66,6 +71,8 @@ export interface RootRealmProfileData {
   avatarUrl?: string | null;
   /** Phase 1 `preview_value` of the equipped avatar border, if any. */
   avatarFrameId?: string;
+  /** How the equipped portrait sits inside the frame. */
+  avatarComposition?: CosmeticComposition;
   level: number;
   rank: string;
   /** Lifetime XP. */
@@ -103,14 +110,21 @@ export interface RootRealmQuest {
 export interface RootRealmCosmetic {
   id: string;
   name: string;
+  /** Equipment-slot label (`AVATAR BORDER`). */
   kind: string;
-  /** Real Phase 1 style/preview label (BASIC/SILVER/GOLD/NEON). */
-  tier?: string;
+  /** Presentation grouping used by the shop filters. */
+  category: string;
+  rarity: CosmeticRarity;
+  rarityLabel: string;
   description: string;
   icon: string;
   cost: number;
-  /** Phase 1 `preview_value`, used for the cosmetic-specific accent CSS. */
+  /** Phase 1 `preview_value`, used for the cosmetic-specific artwork. */
   previewValue: string;
+  composition: CosmeticComposition;
+  /** Creator Exclusive items are never purchasable. */
+  isExclusive: boolean;
+  owned: boolean;
   action: CosmeticState;
   actionLabel: string;
 }

@@ -1,3 +1,5 @@
+import type { CosmeticRarity } from '@/lib/types';
+
 /**
  * Phase 3 presentation types for Social Discovery UI.
  */
@@ -28,6 +30,9 @@ export interface PublicProfileData {
     name: string;
     cosmetic_type: string;
     preview_value: string;
+    rarity: CosmeticRarity;
+    category: string;
+    is_exclusive: boolean;
   } | null;
   created_at: string;
   visibility: 'public' | 'private';

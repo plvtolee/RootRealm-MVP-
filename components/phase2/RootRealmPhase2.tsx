@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import type { ReactNode } from 'react';
 import { LocalTime } from '@/components/local-time';
+import { ShopView as Phase4ShopView } from '@/components/phase4/ShopView';
+import { CosmeticArt, RarityBadge } from '@/components/phase4/CosmeticArt';
 import type {
   CosmeticAction,
   Phase2Feedback,
@@ -49,6 +50,8 @@ interface RootRealmPhase2Props {
   needsReauth?: boolean;
   syncing?: boolean;
   pendingCosmeticId?: string | null;
+  /** True when the signed-in user is the configured RootRealm creator. */
+  isCreator?: boolean;
   onSectionChange?: (section: RootRealmSection) => void;
   onCosmeticAction?: (cosmeticId: string, action: CosmeticAction) => void;
   onCustomizeProfile?: () => void;
@@ -70,6 +73,7 @@ export default function RootRealmPhase2({
   needsReauth = false,
   syncing = false,
   pendingCosmeticId = null,
+  isCreator = false,
   onSectionChange,
   onCosmeticAction,
   onCustomizeProfile,
@@ -123,11 +127,17 @@ export default function RootRealmPhase2({
         )}
 
         {section === 'shop' && (
-          <ShopView
+          <Phase4ShopView
             cosmetics={cosmetics}
             codeCoins={chrome.codeCoins}
             pendingCosmeticId={pendingCosmeticId}
             onCosmeticAction={onCosmeticAction}
+            isCreator={isCreator}
+            profile={{
+              name: chrome.login,
+              avatarUrl: chrome.avatarUrl ?? null,
+              initial: chrome.avatarInitial,
+            }}
           />
         )}
       </main>
@@ -328,6 +338,7 @@ function ProfileView({
         <div
           className="rr2-profile-avatar"
           data-cosmetic={profile.avatarFrameId}
+          data-composition={profile.avatarComposition}
           aria-label={`Avatar for ${profile.name}`}
         >
           {profile.avatarUrl ? (
@@ -541,17 +552,24 @@ function ProfileView({
                     <div
                       className="rr2-loadout-chip"
                       key={`${item.name}-${item.kind}`}
+                      data-rarity={item.rarity}
                     >
-                      <span
-                        className="rr2-cosmetic-art"
-                        data-cosmetic={item.cosmeticId}
-                        aria-hidden="true"
-                      >
-                        {item.icon}
-                      </span>
+                      {item.cosmeticId ? (
+                        <CosmeticArt
+                          slug={item.cosmeticId}
+                          rarity={item.rarity ?? 'common'}
+                          composition={item.composition}
+                          size="chip"
+                        />
+                      ) : (
+                        <span className="rr2-cosmetic-art" aria-hidden="true">
+                          {item.icon}
+                        </span>
+                      )}
                       <span>
                         <strong>{item.name}</strong>
                         {item.kind}
+                        {item.rarity ? <RarityBadge rarity={item.rarity} compact /> : null}
                       </span>
                     </div>
                   ))}
@@ -838,167 +856,6 @@ function QuestSummary({
   );
 }
 
-function ShopView({
-  cosmetics,
-  codeCoins,
-  pendingCosmeticId,
-  onCosmeticAction,
-}: {
-  cosmetics: RootRealmCosmetic[];
-  codeCoins: number;
-  pendingCosmeticId: string | null;
-  onCosmeticAction?: (cosmeticId: string, action: CosmeticAction) => void;
-}) {
-  const [activeKind, setActiveKind] = useState<string>('all');
-  const kinds = Array.from(new Set(cosmetics.map((item) => item.kind)));
-  const visible =
-    activeKind === 'all'
-      ? cosmetics
-      : cosmetics.filter((item) => item.kind === activeKind);
-  const anyPending = pendingCosmeticId !== null;
-
-  return (
-    <>
-      <PageHeader
-        kicker="REALM EXCHANGE"
-        title={
-          <>
-            The cosmetic <em>shop</em>
-          </>
-        }
-        description="Collect the small details that make your realm yours. Every style shares the same neutral interface."
-      />
-
-      <div className="rr2-shop-toolbar">
-        <div className="rr2-shop-balance">
-          <span aria-hidden="true">◆</span>
-          <div>
-            <small>YOUR BALANCE</small>
-            <strong>
-              {NUMBER_FORMAT.format(codeCoins)} <span>CODECOINS</span>
-            </strong>
-          </div>
-        </div>
-
-        <div
-          className="rr2-shop-filters"
-          role="group"
-          aria-label="Cosmetic categories"
-        >
-          <button
-            className={`rr2-filter${activeKind === 'all' ? ' is-active' : ''}`}
-            type="button"
-            aria-pressed={activeKind === 'all'}
-            onClick={() => setActiveKind('all')}
-          >
-            All items
-          </button>
-          {kinds.map((kind) => (
-            <button
-              key={kind}
-              className={`rr2-filter${activeKind === kind ? ' is-active' : ''}`}
-              type="button"
-              aria-pressed={activeKind === kind}
-              onClick={() => setActiveKind(kind)}
-            >
-              {kind}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {cosmetics.length === 0 ? (
-        <p className="rr2-empty">No cosmetics are available right now.</p>
-      ) : visible.length === 0 ? (
-        <p className="rr2-empty">No cosmetics match this filter.</p>
-      ) : (
-        <div className="rr2-shop-grid">
-          {visible.map((item) => {
-            const busy = pendingCosmeticId === item.id;
-            const affordable = codeCoins >= item.cost;
-            const purchaseDisabled = item.action === 'purchase' && !affordable;
-
-            return (
-              <article className="rr2-shop-card" key={item.id}>
-                <div className="rr2-shop-art" data-cosmetic={item.previewValue}>
-                  <span aria-hidden="true">{item.icon}</span>
-                  {item.tier && <small className="rr2-tier">{item.tier}</small>}
-                </div>
-
-                <div className="rr2-shop-card-body">
-                  <span className="rr2-shop-kind">{item.kind}</span>
-                  <h3>{item.name}</h3>
-                  <p>{item.description}</p>
-
-                  <div className="rr2-shop-card-foot">
-                    <span className="rr2-shop-price">
-                      {item.cost === 0 ? (
-                        'FREE'
-                      ) : (
-                        <>
-                          ◆ {NUMBER_FORMAT.format(item.cost)} <small>CC</small>
-                        </>
-                      )}
-                    </span>
-
-                    <div className="rr2-shop-actions">
-                      {item.action === 'equipped' ? (
-                        <>
-                          <button
-                            type="button"
-                            className="rr2-button rr2-button-muted"
-                            disabled
-                          >
-                            ✓ Equipped
-                          </button>
-                          <button
-                            type="button"
-                            className="rr2-button rr2-button-secondary"
-                            disabled={anyPending || !onCosmeticAction}
-                            onClick={() => onCosmeticAction?.(item.id, 'unequip')}
-                          >
-                            {busy ? 'Updating…' : 'Unequip'}
-                          </button>
-                        </>
-                      ) : item.action === 'purchase' ? (
-                        <button
-                          type="button"
-                          className="rr2-button rr2-button-primary"
-                          disabled={anyPending || purchaseDisabled || !onCosmeticAction}
-                          onClick={() => onCosmeticAction?.(item.id, 'purchase')}
-                        >
-                          {busy
-                            ? 'Purchasing…'
-                            : purchaseDisabled
-                              ? 'Not enough coins'
-                              : item.actionLabel}
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          className="rr2-button rr2-button-secondary"
-                          disabled={anyPending || !onCosmeticAction}
-                          onClick={() => onCosmeticAction?.(item.id, 'equip')}
-                        >
-                          {busy ? 'Updating…' : item.actionLabel}
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      )}
-
-      <p className="rr2-quiet-note">
-        Cosmetic accents stay local to the item and avatar. The surrounding interface
-        remains graphite.
-      </p>
-    </>
-  );
-}
 
 function EmptyPanel({ message }: { message: string }) {
   return (

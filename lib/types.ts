@@ -47,6 +47,12 @@ export interface QuestCompletion {
   progress_at_completion: number | null;
 }
 
+/** Five-tier collectible rarity. */
+export type CosmeticRarity = 'common' | 'rare' | 'epic' | 'legendary' | 'mythical';
+
+/** How the avatar sits inside the cosmetic frame. */
+export type CosmeticComposition = 'square' | 'circle' | 'full';
+
 export interface Cosmetic {
   id: string;
   name: string;
@@ -56,6 +62,12 @@ export interface Cosmetic {
   price: number;
   is_active: boolean;
   created_at: string;
+  /** Presentation rarity; drives badges, ordering, and animation tiers. */
+  rarity: CosmeticRarity;
+  /** Presentation grouping used by the shop filters (Frame, Sigil, …). */
+  category: string;
+  /** Creator Exclusive items are never purchasable. */
+  is_exclusive: boolean;
 }
 
 export interface UserCosmetic {
@@ -153,6 +165,9 @@ export interface PublicCosmetic {
   name: string;
   cosmetic_type: string;
   preview_value: string;
+  rarity: CosmeticRarity;
+  category: string;
+  is_exclusive: boolean;
 }
 
 export interface PublicProfileWithStats extends PublicProfile {

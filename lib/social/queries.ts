@@ -167,7 +167,7 @@ export async function getPublicProfile(username: string): Promise<PublicProfileW
   if (profile.equipped_cosmetic_id) {
     const { data: cosmetic } = await supabase
       .from('cosmetics')
-      .select('id, name, cosmetic_type, preview_value')
+      .select('id, name, cosmetic_type, preview_value, rarity, category, is_exclusive')
       .eq('id', profile.equipped_cosmetic_id)
       .maybeSingle();
     equipped_cosmetic = (cosmetic as PublicCosmetic | null) ?? null;

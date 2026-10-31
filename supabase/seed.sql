@@ -93,11 +93,32 @@ on conflict (id) do update set
   exclude_merge_commits = excluded.exclude_merge_commits,
   repo_filter = excluded.repo_filter;
 
-insert into public.cosmetics (id, name, description, cosmetic_type, preview_value, price, is_active)
+-- Phase 4 "Genesis Codex" collection (13 cosmetics, five rarity tiers).
+-- Column additions live in migration 008_cosmetic_collection.sql.
+insert into public.cosmetics (
+  id, name, description, cosmetic_type, preview_value, price, is_active, rarity, category, is_exclusive
+)
 values
-  ('10000000-0000-0000-0000-000000000001', 'Basic Border', 'A simple, understated outline.', 'avatar_border', 'basic', 25, true),
-  ('10000000-0000-0000-0000-000000000002', 'Silver Border', 'A clean metallic silver ring.', 'avatar_border', 'silver', 60, true),
-  ('10000000-0000-0000-0000-000000000003', 'Gold Border', 'A warm golden glow.', 'avatar_border', 'gold', 120, true),
-  ('10000000-0000-0000-0000-000000000004', 'Neon Border', 'A bright cyberpunk cyan aura.', 'avatar_border', 'neon', 200, true),
-  ('10000000-0000-0000-0000-000000000005', 'Ancient Relic', 'No longer sold in the shop.', 'avatar_border', 'relic', 999, false)
-on conflict (id) do nothing;
+  ('10000000-0000-0000-0000-000000000001', 'Graphite Halo', 'A matte graphite frame cut with a single hairline groove. The quiet badge of a realm freshly founded.', 'avatar_border', 'graphite', 25, true, 'common', 'Frame', false),
+  ('10000000-0000-0000-0000-000000000002', 'Silverline', 'A cool double-bevel in brushed silver. Restraint, sharpened to a clean edge.', 'avatar_border', 'silverline', 45, true, 'common', 'Frame', false),
+  ('10000000-0000-0000-0000-000000000006', 'Ledgerline', 'A blueprint grid pinned by four registration ticks — the first page of work not yet done.', 'avatar_border', 'ledgerline', 65, true, 'common', 'Frame', false),
+  ('10000000-0000-0000-0000-000000000003', 'Aurum Circuit', 'Traced gold circuitry loops the border like current through warm copper. Progress, made visible.', 'avatar_border', 'aurum-circuit', 110, true, 'rare', 'Frame', false),
+  ('10000000-0000-0000-0000-000000000007', 'Frostbound Sigil', 'Pale rime crystallises around a circular ward. A cold oath against the long silence of unfinished projects.', 'avatar_border', 'frostbound', 140, true, 'rare', 'Sigil', false),
+  ('10000000-0000-0000-0000-000000000008', 'Ember Index', 'Slow embers smoulder behind cracked obsidian. Every commit feeds the fire a little longer.', 'avatar_border', 'ember-index', 175, true, 'rare', 'Frame', false),
+  ('10000000-0000-0000-0000-000000000004', 'Neon Pulse', 'A hard cyan tube bent into a frame — the hum of a city, and of a build finally passing at 3am.', 'avatar_border', 'neon-pulse', 240, true, 'epic', 'Aura', false),
+  ('10000000-0000-0000-0000-000000000009', 'Voidglass Prism', 'Black glass folds a sliver of spectrum into each corner. Light goes in; edges come out.', 'avatar_border', 'voidglass', 330, true, 'epic', 'Prism', false),
+  ('10000000-0000-0000-0000-000000000010', 'Aurora Meridian', 'A vertical aurora is caught mid-drift, green and violet ribbons crossing a dark meridian.', 'avatar_border', 'aurora-meridian', 420, true, 'epic', 'Aura', false),
+  ('10000000-0000-0000-0000-000000000011', 'Solar Crown', 'A miniature sun orbits the frame, flares arcing between gold filaments. Prestige that never sets.', 'avatar_border', 'solar-crown', 650, true, 'legendary', 'Sigil', false),
+  ('10000000-0000-0000-0000-000000000012', 'Wraithlight', 'Cold lantern-wisps drift around the border, never quite settling — the light of work done after midnight.', 'avatar_border', 'wraithlight', 850, true, 'legendary', 'Sigil', false),
+  ('10000000-0000-0000-0000-000000000013', 'Astral Horizon', 'A rotating starfield whose constellations re-chart in real time. The realm renders itself anew with every commit.', 'avatar_border', 'astral-horizon', 1400, true, 'mythical', 'Constellation', false),
+  ('10000000-0000-0000-0000-000000000005', 'The Root Cipher', 'Forged for the one who laid the first stone. A living blueprint of the realm''s source, signed in light — the crown jewel of RootRealm.', 'avatar_border', 'root-cipher', 0, true, 'mythical', 'Creator', true)
+on conflict (id) do update set
+  name = excluded.name,
+  description = excluded.description,
+  cosmetic_type = excluded.cosmetic_type,
+  preview_value = excluded.preview_value,
+  price = excluded.price,
+  is_active = excluded.is_active,
+  rarity = excluded.rarity,
+  category = excluded.category,
+  is_exclusive = excluded.is_exclusive;

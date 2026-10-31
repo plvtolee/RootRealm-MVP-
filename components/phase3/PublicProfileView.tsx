@@ -10,18 +10,9 @@ import {
   removeFriend,
 } from '@/lib/social/actions';
 import type { PublicProfileData, ConnectionUIStatus } from './types';
+import { CosmeticArt, RarityBadge } from '@/components/phase4/CosmeticArt';
+import { cosmeticVisual } from '@/lib/cosmetics/visuals';
 import './Phase3.css';
-
-const COSMETIC_ICONS: Record<string, string> = {
-  basic: '◇',
-  silver: '◈',
-  gold: '✧',
-  neon: '⌁',
-};
-
-function cosmeticIcon(previewValue: string): string {
-  return COSMETIC_ICONS[previewValue] ?? '✦';
-}
 
 function cosmeticKindLabel(type: string): string {
   if (type === 'avatar_border') return 'AVATAR BORDER';
@@ -206,6 +197,12 @@ export function PublicProfileView({
           <div
             className="rr2-profile-avatar"
             data-cosmetic={publicProfile.equipped_cosmetic?.preview_value}
+            data-composition={
+              publicProfile.equipped_cosmetic
+                ? cosmeticVisual(publicProfile.equipped_cosmetic.preview_value).composition
+                : undefined
+            }
+            data-rarity={publicProfile.equipped_cosmetic?.rarity}
             aria-label={`Avatar for ${displayName}`}
           >
             {publicProfile.avatar_url ? (
@@ -307,17 +304,25 @@ export function PublicProfileView({
               <h3 id="cosmetics-heading">Equipped cosmetics</h3>
             </div>
             <div className="rr2-loadout">
-              <div className="rr2-loadout-chip">
-                <span
-                  className="rr2-cosmetic-art"
-                  data-cosmetic={publicProfile.equipped_cosmetic.preview_value}
-                  aria-hidden="true"
-                >
-                  {cosmeticIcon(publicProfile.equipped_cosmetic.preview_value)}
-                </span>
+              <div
+                className="rr2-loadout-chip"
+                data-rarity={publicProfile.equipped_cosmetic.rarity}
+              >
+                <CosmeticArt
+                  slug={publicProfile.equipped_cosmetic.preview_value}
+                  rarity={publicProfile.equipped_cosmetic.rarity}
+                  composition={cosmeticVisual(publicProfile.equipped_cosmetic.preview_value).composition}
+                  exclusive={publicProfile.equipped_cosmetic.is_exclusive}
+                  size="chip"
+                />
                 <span>
                   <strong>{publicProfile.equipped_cosmetic.name}</strong>
                   {cosmeticKindLabel(publicProfile.equipped_cosmetic.cosmetic_type)}
+                  <RarityBadge
+                    rarity={publicProfile.equipped_cosmetic.rarity}
+                    exclusive={publicProfile.equipped_cosmetic.is_exclusive}
+                    compact
+                  />
                 </span>
               </div>
             </div>

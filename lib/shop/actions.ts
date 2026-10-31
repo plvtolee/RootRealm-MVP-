@@ -83,6 +83,9 @@ function mapPurchaseError(message: string, code?: string): string {
   if (message.includes('not found or inactive')) {
     return 'This item is no longer available.'
   }
+  if (message.includes('not available for purchase')) {
+    return 'This cosmetic is exclusive and cannot be purchased.'
+  }
   if (code === '28000' || message.includes('authenticated')) {
     return 'Please sign in to purchase items.'
   }

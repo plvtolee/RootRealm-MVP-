@@ -16,20 +16,23 @@ const profile: Profile = {
   avatar_url: 'https://avatars.githubusercontent.com/u/1',
   total_xp: 250,
   coins: 120,
-  equipped_cosmetic_id: 'cosmetic-gold',
+  equipped_cosmetic_id: 'cosmetic-aurum',
   created_at: '2026-01-01T00:00:00.000Z',
   updated_at: '2026-01-01T00:00:00.000Z',
 };
 
-const goldBorder: Cosmetic = {
-  id: 'cosmetic-gold',
-  name: 'Gold Border',
-  description: 'A warm golden glow.',
+const aurumCircuit: Cosmetic = {
+  id: 'cosmetic-aurum',
+  name: 'Aurum Circuit',
+  description: 'Traced gold circuitry loops the border like current through warm copper.',
   cosmetic_type: 'avatar_border',
-  preview_value: 'gold',
-  price: 120,
+  preview_value: 'aurum-circuit',
+  price: 110,
   is_active: true,
   created_at: '2026-01-01T00:00:00.000Z',
+  rarity: 'rare',
+  category: 'Frame',
+  is_exclusive: false,
 };
 
 function quest(overrides: Partial<QuestAdapterInput> & Pick<QuestAdapterInput, 'id' | 'title'>): QuestAdapterInput {
@@ -93,7 +96,7 @@ const stats: ProfileActivityStats = {
 
 const input: ProfileAdapterInput = {
   profile,
-  equipped: goldBorder,
+  equipped: aurumCircuit,
   questsCompleted: 1,
   progression: {
     level: 3,
@@ -145,20 +148,26 @@ describe('Phase 2 adapters', () => {
 
   it('maps owned, equipped, and purchasable cosmetics to real actions', () => {
     const cosmetics: CosmeticAdapterInput[] = [
-      { ...goldBorder, owned: true, equipped: true },
+      { ...aurumCircuit, owned: true, equipped: true },
       {
-        ...goldBorder,
+        ...aurumCircuit,
         id: 'cosmetic-neon',
-        name: 'Neon Border',
-        preview_value: 'neon',
+        name: 'Neon Pulse',
+        preview_value: 'neon-pulse',
+        price: 240,
+        rarity: 'epic',
+        category: 'Aura',
         owned: true,
         equipped: false,
       },
       {
-        ...goldBorder,
+        ...aurumCircuit,
         id: 'cosmetic-silver',
-        name: 'Silver Border',
-        preview_value: 'silver',
+        name: 'Silverline',
+        preview_value: 'silverline',
+        price: 45,
+        rarity: 'common',
+        category: 'Frame',
         owned: false,
         equipped: false,
       },
@@ -170,14 +179,27 @@ describe('Phase 2 adapters', () => {
       action: 'equipped',
       actionLabel: 'Equipped',
       kind: 'AVATAR BORDER',
-      tier: 'GOLD',
-      previewValue: 'gold',
+      rarity: 'rare',
+      rarityLabel: 'Rare',
+      category: 'Frame',
+      previewValue: 'aurum-circuit',
+      isExclusive: false,
+      owned: true,
     });
-    expect(mapped[1]).toMatchObject({ action: 'equip', actionLabel: 'Equip', tier: 'NEON' });
+    expect(mapped[1]).toMatchObject({
+      action: 'equip',
+      actionLabel: 'Equip',
+      rarity: 'epic',
+      rarityLabel: 'Epic',
+      category: 'Aura',
+      owned: true,
+    });
     expect(mapped[2]).toMatchObject({
       action: 'purchase',
       actionLabel: 'Purchase',
-      tier: 'SILVER',
+      rarity: 'common',
+      rarityLabel: 'Common',
+      owned: false,
     });
   });
 
@@ -193,11 +215,14 @@ describe('Phase 2 adapters', () => {
     expect(result.activityEvents).toBe(4);
     expect(result.codeCoins).toBe(120);
     expect(result.githubStatus).toBe('connected');
-    expect(result.avatarFrameId).toBe('gold');
+    expect(result.avatarFrameId).toBe('aurum-circuit');
+    expect(result.avatarComposition).toBe('square');
     expect(result.loadout[0]).toMatchObject({
-      name: 'Gold Border',
+      name: 'Aurum Circuit',
       kind: 'AVATAR BORDER',
-      cosmeticId: 'gold',
+      cosmeticId: 'aurum-circuit',
+      rarity: 'rare',
+      category: 'Frame',
     });
 
     expect(result.attributes.find((item) => item.name === 'Commits authored')).toMatchObject({

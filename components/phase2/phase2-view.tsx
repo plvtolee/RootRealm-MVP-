@@ -27,6 +27,8 @@ interface Phase2ViewProps {
   quests?: RootRealmQuest[];
   cosmetics?: RootRealmCosmetic[];
   connection?: Phase2Connection | null;
+  /** True when the signed-in user is the configured RootRealm creator. */
+  isCreator?: boolean;
   connectAction: () => Promise<void>;
   signOutAction: () => Promise<void>;
 }
@@ -43,6 +45,7 @@ export function Phase2View({
   quests = [],
   cosmetics = [],
   connection = null,
+  isCreator = false,
   connectAction,
   signOutAction,
 }: Phase2ViewProps) {
@@ -157,6 +160,7 @@ export function Phase2View({
       profile={profile}
       quests={quests}
       cosmetics={cosmetics}
+      isCreator={isCreator}
       feedback={feedback}
       lastSyncedAt={connection?.lastSyncedAt ?? null}
       needsReauth={connection?.needsReauth ?? false}

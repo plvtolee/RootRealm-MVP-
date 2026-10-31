@@ -28,7 +28,12 @@ migrations, activity-sync behavior, checks, and deployment.
 
 - **Profile** — avatar with equipped border, level, total XP, XP progress, coins,
   quests completed, and GitHub sync status.
-- **Shop** — browse avatar borders, purchase, equip, unequip.
+- **Shop** — the "Genesis Codex" cosmetic collection: a Limited Mythic Release
+  banner, rarity/category filters, an animated catalogue (Common/Rare/Epic are
+  static; Legendary and Mythical animate), a detailed inspection panel with a
+  profile preview, and purchase/equip/unequip — all backed by the existing
+  currency and ownership logic. "The Root Cipher" is a Creator Exclusive Mythical
+  reserved for the account set in `ROOTREALM_CREATOR_USERNAME`.
 - **Quests** — activity-driven milestones with progress, XP + coin rewards, and
   automatic sync on load plus a manual **Sync GitHub** action.
 
