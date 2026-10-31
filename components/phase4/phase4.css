@@ -294,12 +294,13 @@
 .p4-art[data-frame="true"] .p4-art-glyph {
   display: none;
 }
-/* Keep the portrait inside the painted opening instead of letting it bleed
-   into the artwork's transparent outer margin. */
+/* Keep the portrait flush with the painted opening instead of letting it
+   bleed into the artwork's transparent outer margin. The artwork is trimmed
+   to its opaque bounds, so the frame reads as an edge-to-edge ring. */
 .p4-art[data-frame="true"] .p4-art-portrait {
-  inset: 12.5%;
-  width: 75%;
-  height: 75%;
+  inset: 7.5%;
+  width: 85%;
+  height: 85%;
 }
 
 /* --------------------------------------------------------------------------
@@ -644,7 +645,7 @@
 /* Graphite Halo ships hand-painted artwork, so the live avatar overlays the
    real frame instead of the CSS border/glyph. */
 .rr2-root .rr2-profile-avatar[data-cosmetic="graphite"] {
-  border-color: transparent;
+  border: 0;
   outline: none;
   box-shadow: none;
 }
@@ -654,13 +655,13 @@
   inset: 0;
   z-index: 3;
   pointer-events: none;
-  background: url("/cosmetics/graphite-halo.png") center / contain no-repeat;
+  background: url("/cosmetics/graphite-halo.png") center / 100% 100% no-repeat;
 }
 .rr2-root .rr2-profile-avatar[data-cosmetic="graphite"] > img {
   position: absolute;
-  inset: 14%;
-  width: 72%;
-  height: 72%;
+  inset: 7.5%;
+  width: 85%;
+  height: 85%;
   object-fit: cover;
 }
 .rr2-root .rr2-profile-avatar[data-cosmetic="graphite"]::after {
