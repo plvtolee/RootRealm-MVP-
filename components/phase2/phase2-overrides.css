@@ -1,0 +1,577 @@
+/* RootRealm Phase 2 integration overrides.
+   Every selector stays scoped under .rr2-root. */
+
+.rr2-root .rr2-wordmark {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* The reference's `.rr2-root button { font: inherit; color: inherit; }` has a
+   higher specificity than the button variants. Restore the intended variants. */
+.rr2-root .rr2-button {
+  color: var(--rr2-text);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.025em;
+}
+.rr2-root .rr2-button-primary {
+  color: #262b34;
+}
+.rr2-root .rr2-button-muted {
+  color: var(--rr2-success);
+}
+.rr2-root .rr2-small-button {
+  font-size: 11px;
+}
+.rr2-root .rr2-shop-card .rr2-button {
+  font-size: 10px;
+}
+.rr2-root .rr2-filter {
+  color: var(--rr2-muted);
+  font-size: 10px;
+}
+.rr2-root .rr2-filter.is-active {
+  color: var(--rr2-text);
+}
+.rr2-root .rr2-panel-link {
+  color: var(--rr2-accent);
+  font-size: 10px;
+}
+
+.rr2-root .rr2-profile-avatar img,
+.rr2-root .rr2-mini-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rr2-root .rr2-profile-avatar img {
+  display: block;
+}
+
+/* Account menu */
+.rr2-root .rr2-account-menu {
+  position: relative;
+}
+.rr2-root .rr2-account-menu > summary {
+  list-style: none;
+  cursor: pointer;
+}
+.rr2-root .rr2-account-menu > summary::-webkit-details-marker {
+  display: none;
+}
+.rr2-root .rr2-account-menu[open] .rr2-chevron {
+  transform: rotate(180deg);
+}
+.rr2-root .rr2-account-popover {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 40;
+  min-width: 160px;
+  padding: 8px;
+  border: 1px solid var(--rr2-line-bright);
+  background: #14171d;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+.rr2-root .rr2-account-popover .rr2-button {
+  width: 100%;
+}
+
+/* Feedback */
+.rr2-feedback {
+  margin-bottom: 18px;
+  padding: 10px 13px;
+  border: 1px solid var(--rr2-line);
+  font-size: 11px;
+}
+.rr2-feedback.is-success {
+  border-color: rgba(157, 189, 138, 0.35);
+  color: var(--rr2-success);
+  background: rgba(157, 189, 138, 0.05);
+}
+.rr2-feedback.is-error {
+  border-color: rgba(209, 138, 113, 0.4);
+  color: var(--rr2-danger);
+  background: rgba(209, 138, 113, 0.06);
+}
+
+/* Sync controls */
+.rr2-sync-control {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.rr2-sync-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.rr2-sync-meta small {
+  color: var(--rr2-dim);
+  font-size: 9px;
+}
+.rr2-alert {
+  margin-bottom: 17px;
+  padding: 10px 13px;
+  border: 1px solid rgba(214, 184, 120, 0.35);
+  color: var(--rr2-warning);
+  background: rgba(214, 184, 120, 0.05);
+  font-size: 11px;
+}
+
+/* Quest states */
+.rr2-quest-status.is-incomplete {
+  color: var(--rr2-warning);
+  border-color: rgba(214, 184, 120, 0.35);
+}
+.rr2-quest-card.is-incomplete {
+  border-color: rgba(214, 184, 120, 0.3);
+}
+.rr2-quest-note {
+  margin: 0 0 12px;
+  color: var(--rr2-warning);
+  font-size: 10px;
+}
+
+/* Shop actions */
+.rr2-shop-card-foot {
+  flex-wrap: wrap;
+}
+.rr2-shop-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.rr2-shop-actions .rr2-button {
+  flex: 0 0 auto;
+}
+
+/* Empty states */
+.rr2-empty {
+  margin: 0;
+  padding: 22px 16px;
+  border: 1px dashed var(--rr2-line-bright);
+  color: var(--rr2-muted);
+  font-size: 11px;
+  text-align: center;
+}
+.rr2-empty-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+/* Cosmetic accents for Phase 1 preview values. Accents stay local. */
+.rr2-root .rr2-shop-art[data-cosmetic="basic"] {
+  --rr2-item-color: #c3c8d0;
+  --rr2-item-outline: rgba(195, 200, 208, 0.35);
+  --rr2-item-glow: rgba(195, 200, 208, 0.1);
+  --rr2-item-bg: #1d2026;
+}
+.rr2-root .rr2-shop-art[data-cosmetic="silver"] {
+  --rr2-item-color: #d9dee6;
+  --rr2-item-outline: rgba(217, 222, 230, 0.42);
+  --rr2-item-glow: rgba(217, 222, 230, 0.18);
+  --rr2-item-bg: #202329;
+}
+.rr2-root .rr2-shop-art[data-cosmetic="gold"] {
+  --rr2-item-color: #d6b878;
+  --rr2-item-outline: rgba(214, 184, 120, 0.4);
+  --rr2-item-glow: rgba(214, 184, 120, 0.18);
+  --rr2-item-bg: #211f1a;
+}
+.rr2-root .rr2-shop-art[data-cosmetic="neon"] {
+  --rr2-item-color: #7cf4e7;
+  --rr2-item-outline: rgba(124, 244, 231, 0.43);
+  --rr2-item-glow: rgba(124, 244, 231, 0.2);
+  --rr2-item-bg: #122427;
+}
+
+.rr2-root .rr2-profile-avatar[data-cosmetic="basic"] {
+  border: 1px solid #c3c8d0;
+  outline: 1px dashed rgba(195, 200, 208, 0.45);
+  color: #eef0f4;
+  background: radial-gradient(circle at 50% 30%, #3a3f47, #15181d 70%);
+  box-shadow: 0 0 0 4px rgba(195, 200, 208, 0.05), 0 0 18px rgba(195, 200, 208, 0.12);
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="basic"]::after {
+  content: "◇";
+  border-color: #c3c8d0;
+  background: #15181d;
+  color: #c3c8d0;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="silver"] {
+  border: 1px solid #d9dee6;
+  outline: 1px dashed rgba(217, 222, 230, 0.48);
+  color: #f4f6f9;
+  background: radial-gradient(circle at 50% 30%, #4a5059, #1a1e24 70%);
+  box-shadow: 0 0 0 4px rgba(217, 222, 230, 0.06), 0 0 22px rgba(217, 222, 230, 0.16);
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="silver"]::after {
+  content: "◈";
+  border-color: #d9dee6;
+  background: #1a1e24;
+  color: #d9dee6;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="gold"] {
+  border: 1px solid #d6b878;
+  outline: 1px dashed rgba(214, 184, 120, 0.5);
+  color: #f3e2b8;
+  background: radial-gradient(circle at 50% 30%, #55482c, #211f1a 70%);
+  box-shadow: 0 0 0 4px rgba(214, 184, 120, 0.07), 0 0 22px rgba(214, 184, 120, 0.18);
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="gold"]::after {
+  content: "✧";
+  border-color: #d6b878;
+  background: #211f1a;
+  color: #d6b878;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="neon"] {
+  border: 2px solid #7cf4e7;
+  outline: 1px dashed rgba(124, 244, 231, 0.65);
+  color: #c7fff7;
+  background: radial-gradient(circle at 50% 30%, #20545a, #122427 72%);
+  box-shadow: 0 0 0 4px rgba(124, 244, 231, 0.06), 0 0 23px rgba(124, 244, 231, 0.2);
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="neon"]::after {
+  content: "⌁";
+  border-color: #7cf4e7;
+  background: #122427;
+  color: #7cf4e7;
+}
+
+.rr2-root .rr2-cosmetic-art[data-cosmetic="basic"] {
+  border-color: #c3c8d0;
+  background: #1d2026;
+  color: #c3c8d0;
+  box-shadow: 0 0 20px rgba(195, 200, 208, 0.1);
+}
+.rr2-root .rr2-cosmetic-art[data-cosmetic="silver"] {
+  border-color: #d9dee6;
+  background: #202329;
+  color: #d9dee6;
+  box-shadow: 0 0 20px rgba(217, 222, 230, 0.12);
+}
+.rr2-root .rr2-cosmetic-art[data-cosmetic="gold"] {
+  border-color: #d6b878;
+  background: #211f1a;
+  color: #d6b878;
+  box-shadow: 0 0 20px rgba(214, 184, 120, 0.12);
+}
+.rr2-root .rr2-cosmetic-art[data-cosmetic="neon"] {
+  border-color: #7cf4e7;
+  background: #122427;
+  color: #7cf4e7;
+  box-shadow: 0 0 20px rgba(124, 244, 231, 0.12);
+}
+
+/* Responsive additions */
+@media (max-width: 700px) {
+  .rr2-sync-control {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .rr2-shop-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+  .rr2-shop-actions .rr2-button {
+    flex: 1 1 auto;
+  }
+  .rr2-account-popover {
+    right: 0;
+  }
+}
+
+/* ========================================================================
+   LOGIN PAGE — distinct but of the same realm
+   ======================================================================== */
+
+.rr2-login-root {
+  --rr2-bg: #0b0d11;
+  --rr2-panel: #14171d;
+  --rr2-panel-2: #1b1f26;
+  --rr2-panel-3: #252a33;
+  --rr2-line: rgba(202, 209, 221, .12);
+  --rr2-line-bright: rgba(202, 209, 221, .28);
+  --rr2-accent: #d4d9e2;
+  --rr2-accent-soft: #939cab;
+  --rr2-text: #eef0f4;
+  --rr2-muted: #a0a7b3;
+  --rr2-dim: #737b89;
+  --rr2-success: #9dbd8a;
+  --rr2-warning: #d6b878;
+  --rr2-danger: #d18a71;
+  color: var(--rr2-text);
+  background: var(--rr2-bg);
+  min-height: 100vh;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  isolation: isolate;
+}
+
+.rr2-login-root *,
+.rr2-login-root *::before,
+.rr2-login-root *::after {
+  box-sizing: border-box;
+}
+
+/* Atmospheric background layers */
+.rr2-login-atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.rr2-login-glow {
+  position: absolute;
+  top: -30%;
+  left: 50%;
+  translate: -50% 0;
+  width: 80vmax;
+  height: 80vmax;
+  background: radial-gradient(ellipse at center, rgba(212, 217, 226, 0.035), transparent 55%);
+  animation: rr2-glow-breathe 18s ease-in-out infinite;
+}
+
+.rr2-login-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(202, 209, 221, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(202, 209, 221, 0.02) 1px, transparent 1px);
+  background-size: 80px 80px;
+  animation: rr2-grid-drift 60s linear infinite;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black, transparent);
+}
+
+@keyframes rr2-glow-breathe {
+  0%, 100% { opacity: 0.6; transform: translate(-50%, 0) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, 0) scale(1.05); }
+}
+
+@keyframes rr2-grid-drift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(80px, 80px); }
+}
+
+/* Card */
+.rr2-login-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.rr2-login-card-inner {
+  width: 100%;
+  max-width: 380px;
+  background: linear-gradient(180deg, var(--rr2-panel), var(--rr2-panel-2));
+  border: 1px solid var(--rr2-line);
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 1px rgba(202, 209, 221, 0.04),
+    0 24px 48px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(202, 209, 221, 0.03);
+  overflow: hidden;
+}
+
+.rr2-login-card-inner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--rr2-accent-soft), transparent);
+  opacity: 0.6;
+}
+
+.rr2-login-header {
+  text-align: center;
+  padding: 36px 28px 24px;
+}
+
+.rr2-login-badge {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--rr2-line-bright);
+  border-radius: 14px;
+  background: radial-gradient(circle at 30% 30%, var(--rr2-panel-3), var(--rr2-panel-2));
+  color: var(--rr2-accent);
+  box-shadow:
+    inset 0 1px 0 rgba(202, 209, 221, 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.3);
+}
+.rr2-login-badge svg { width: 28px; height: 28px; }
+
+.rr2-login-title {
+  margin: 0 0 10px;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--rr2-text);
+}
+.rr2-login-title span { color: var(--rr2-accent); }
+
+.rr2-login-subtitle {
+  margin: 0;
+  color: var(--rr2-muted);
+  font-size: 13px;
+  line-height: 1.55;
+  max-width: 280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Error */
+.rr2-login-error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 24px 16px;
+  padding: 12px 14px;
+  border: 1px solid rgba(209, 138, 113, 0.35);
+  border-radius: 8px;
+  background: rgba(209, 138, 113, 0.07);
+  color: var(--rr2-danger);
+  font-size: 12px;
+  animation: rr2-error-in 0.25s ease-out;
+}
+.rr2-login-error svg { flex: 0 0 18px; width: 18px; height: 18px; }
+
+@keyframes rr2-error-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Form / Button */
+.rr2-login-form { padding: 0 24px 8px; }
+
+.rr2-login-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border: 1px solid var(--rr2-accent);
+  border-radius: 8px;
+  background: var(--rr2-accent);
+  color: #262b34;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.08s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.rr2-login-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), transparent 50%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.rr2-login-button:hover {
+  border-color: #fff;
+  box-shadow: 0 4px 20px rgba(212, 217, 226, 0.25);
+}
+.rr2-login-button:hover::before { opacity: 1; }
+.rr2-login-button:active { transform: scale(0.99); }
+.rr2-login-button:focus-visible {
+  outline: 2px solid var(--rr2-accent);
+  outline-offset: 3px;
+}
+
+.rr2-login-button-icon {
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Footnote */
+.rr2-login-footnote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 20px 24px 28px;
+  color: var(--rr2-dim);
+  font-size: 11px;
+  line-height: 1.4;
+}
+.rr2-login-footnote svg { flex: 0 0 15px; width: 15px; height: 15px; }
+
+/* Footer */
+.rr2-login-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 18px 20px;
+  color: var(--rr2-dim);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-top: 1px solid var(--rr2-line);
+  background: rgba(20, 23, 29, 0.6);
+  backdrop-filter: blur(8px);
+}
+.rr2-login-footer span:nth-child(2) { color: var(--rr2-accent-soft); }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .rr2-login-glow,
+  .rr2-login-grid {
+    animation: none;
+  }
+  .rr2-login-error { animation: none; }
+  .rr2-login-button { transition: none; }
+}
+
+/* Mobile */
+@media (max-width: 420px) {
+  .rr2-login-card { padding: 20px 12px; }
+  .rr2-login-header { padding: 28px 20px 18px; }
+  .rr2-login-title { font-size: 24px; }
+  .rr2-login-form { padding: 0 16px 4px; }
+  .rr2-login-footnote { margin: 16px 16px 22px; font-size: 10px; }
+  .rr2-login-error { margin: 0 16px 12px; }
+}

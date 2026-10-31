@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import '@/components/phase2/RootRealmPhase2.css'
+import '@/components/phase2/phase2-overrides.css'
+import '@/components/phase3/Phase3.css'
 
 export const metadata: Metadata = {
   title: 'RootRealm',

@@ -1,6 +1,8 @@
 import { requireSession } from '@/lib/auth/session'
+import { signInWithGitHub, signOut } from '@/lib/auth/actions'
 import { getCosmeticsWithOwnership } from '@/lib/shop/queries'
-import { ShopList } from '@/components/shop-list'
+import { toPhase2Chrome, toPhase2Cosmetics } from '@/lib/phase2/adapters'
+import { Phase2View } from '@/components/phase2/phase2-view'
 
 export default async function ShopPage() {
   const { profile } = await requireSession()
@@ -10,20 +12,12 @@ export default async function ShopPage() {
   )
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h1 className="text-2xl font-bold tracking-tight">Shop</h1>
-        <span className="rounded-full border border-border px-3 py-1 text-sm font-medium">
-          {profile.coins.toLocaleString()} coins
-        </span>
-      </div>
-
-      <ShopList
-        cosmetics={cosmetics}
-        username={profile.username}
-        avatarUrl={profile.avatar_url}
-        coins={profile.coins}
-      />
-    </div>
+    <Phase2View
+      section="shop"
+      chrome={toPhase2Chrome(profile)}
+      cosmetics={toPhase2Cosmetics(cosmetics)}
+      connectAction={signInWithGitHub}
+      signOutAction={signOut}
+    />
   )
 }

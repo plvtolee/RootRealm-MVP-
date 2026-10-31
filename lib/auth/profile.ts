@@ -14,12 +14,19 @@ function readGitHubMetadata(user: User) {
     user.email?.split('@')[0] ??
     `realm-${user.id.slice(0, 8)}`
 
+  // A friendlier label for display; falls back to the username.
+  const displayName =
+    (meta.name as string | undefined) ??
+    (meta.full_name as string | undefined) ??
+    (meta.user_name as string | undefined) ??
+    username
+
   const avatarUrl =
     (meta.avatar_url as string | undefined) ??
     (meta.picture as string | undefined) ??
     null
 
-  return { username, avatarUrl }
+  return { username, displayName, avatarUrl }
 }
 
 /**
@@ -40,7 +47,7 @@ export async function ensureProfile(user: User): Promise<Profile | null> {
     return existing as Profile
   }
 
-  const { username, avatarUrl } = readGitHubMetadata(user)
+  const { username, displayName, avatarUrl } = readGitHubMetadata(user)
 
   const { data: created, error } = await admin
     .from('profiles')
@@ -48,6 +55,7 @@ export async function ensureProfile(user: User): Promise<Profile | null> {
       {
         id: user.id,
         username,
+        display_name: displayName,
         avatar_url: avatarUrl,
       },
       { onConflict: 'id', ignoreDuplicates: true }

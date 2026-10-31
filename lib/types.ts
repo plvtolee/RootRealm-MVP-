@@ -9,6 +9,8 @@ export type QuestProgressStatus = 'in_progress' | 'completed' | 'indeterminate';
 export interface Profile {
   id: string;
   username: string;
+  display_name?: string | null;
+  visibility?: 'public' | 'private';
   avatar_url: string | null;
   total_xp: number;
   coins: number;
@@ -105,4 +107,94 @@ export interface PurchaseCosmeticResult {
   cosmetic_id: string;
   price_paid: number;
   new_coins: number;
+}
+
+/** Aggregate public-activity stats used by the Phase 2 profile. */
+export interface ProfileActivityStats {
+  commits: number;
+  mergedPrs: number;
+  repositories: number;
+  activeDays: number;
+  firstActivityAt: string | null;
+  lastActivityAt: string | null;
+}
+
+/* ============================================================
+   Phase 3 — Social Discovery types
+   ============================================================ */
+
+export type ConnectionStatus = 'none' | 'pending_outgoing' | 'pending_incoming' | 'accepted';
+
+export interface PublicProfile {
+  id: string;
+  username: string;
+  display_name: string;
+  avatar_url: string | null;
+  total_xp: number;
+  coins: number; // 0 for other users
+  equipped_cosmetic_id: string | null;
+  created_at: string;
+  visibility: 'public' | 'private';
+  connection_status: ConnectionStatus;
+  connection_id: string | null;
+}
+
+export interface PublicProfileStats {
+  quests_completed: number;
+  total_xp: number;
+  level: number;
+  commits: number;
+  merged_prs: number;
+  repositories: number;
+}
+
+export interface PublicCosmetic {
+  id: string;
+  name: string;
+  cosmetic_type: string;
+  preview_value: string;
+}
+
+export interface PublicProfileWithStats extends PublicProfile {
+  stats: PublicProfileStats;
+  equipped_cosmetic: PublicCosmetic | null;
+}
+
+export interface UserSearchResult {
+  id: string;
+  username: string;
+  display_name: string;
+  avatar_url: string | null;
+  total_xp: number;
+  level: number;
+  connection_status: ConnectionStatus;
+  connection_id: string | null;
+}
+
+export interface Connection {
+  id: string;
+  requester_id: string;
+  recipient_id: string;
+  status: 'pending' | 'accepted' | 'declined';
+  created_at: string;
+  updated_at: string;
+  // Populated for UI
+  other_user?: UserSearchResult;
+}
+
+export interface ConnectionActionResult {
+  connection_id: string;
+  status: string;
+}
+
+export interface SearchUsersParams {
+  query: string;
+  limit?: number;
+  offset?: number;
+}
+
+export interface SearchUsersResult {
+  users: UserSearchResult[];
+  total: number;
+  hasMore: boolean;
 }
