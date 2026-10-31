@@ -291,7 +291,8 @@
 }
 .p4-art[data-frame="true"] .p4-art-frame,
 .p4-art[data-frame="true"] .p4-art-badge,
-.p4-art[data-frame="true"] .p4-art-glyph {
+.p4-art[data-frame="true"] .p4-art-glyph,
+.p4-art[data-frame="true"] .p4-motif {
   display: none;
 }
 /* Keep the portrait flush with the painted opening instead of letting it

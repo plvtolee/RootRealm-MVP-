@@ -75,7 +75,7 @@ export function CosmeticArt({
         <span className="p4-art-portrait p4-art-initial" aria-hidden="true">
           {portraitInitial}
         </span>
-      ) : (
+      ) : visual.frame ? null : (
         <>
           <MotifArtwork motif={visual.motif} />
           <span className="p4-art-glyph" aria-hidden="true">
