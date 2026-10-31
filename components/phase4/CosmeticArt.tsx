@@ -50,6 +50,7 @@ export function CosmeticArt({
       data-rarity={rarity}
       data-composition={resolvedComposition}
       data-exclusive={exclusive ? 'true' : undefined}
+      data-frame={visual.frame ? 'true' : undefined}
       role={label ? 'img' : undefined}
       aria-label={label}
       aria-hidden={label ? undefined : true}
@@ -82,6 +83,11 @@ export function CosmeticArt({
           </span>
         </>
       )}
+
+      {visual.frame ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img className="p4-art-frame-image" src={visual.frame} alt="" aria-hidden="true" />
+      ) : null}
 
       <span className="p4-art-badge" aria-hidden="true">
         {visual.glyph}

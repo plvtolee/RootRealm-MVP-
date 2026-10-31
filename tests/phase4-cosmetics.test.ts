@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { RARITY_META, RARITY_ORDER, rarityMeta, rarityOrder } from '@/lib/cosmetics/rarity';
-import { COSMETIC_VISUALS, cosmeticComposition, cosmeticVisual } from '@/lib/cosmetics/visuals';
+import { COSMETIC_VISUALS, cosmeticComposition, cosmeticFrame, cosmeticVisual } from '@/lib/cosmetics/visuals';
 import { FEATURED_RELEASE } from '@/lib/cosmetics/release';
 
 describe('Phase 4 rarity system', () => {
@@ -53,6 +53,15 @@ describe('Phase 4 cosmetic visuals', () => {
   it('falls back safely for unknown slugs', () => {
     expect(cosmeticVisual('does-not-exist').composition).toBe('square');
     expect(cosmeticVisual(null).slug).toBe('graphite');
+  });
+
+  it('uses hand-painted frame artwork where supplied', () => {
+    expect(cosmeticFrame('graphite')).toBe('/cosmetics/graphite-halo.png');
+    for (const visual of Object.values(COSMETIC_VISUALS)) {
+      if (visual.frame) {
+        expect(visual.frame).toMatch(/^\/cosmetics\/[a-z0-9-]+\.png$/);
+      }
+    }
   });
 });
 

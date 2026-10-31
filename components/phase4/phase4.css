@@ -274,6 +274,34 @@
 .p4-art--chip[data-composition="circle"] .p4-art-portrait,
 .p4-art--thumb[data-composition="circle"] .p4-art-portrait { inset: 12%; }
 
+/* Real artwork frames ---------------------------------------------------
+   Some cosmetics ship hand-painted transparent PNGs instead of the CSS
+   frame. The bitmap sits above the motif/portrait but below the animated
+   rarity layers, so the transparent centre still shows the avatar while the
+   painted border replaces the drawn frame. */
+.p4-art-frame-image {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+.p4-art[data-frame="true"] .p4-art-frame,
+.p4-art[data-frame="true"] .p4-art-badge,
+.p4-art[data-frame="true"] .p4-art-glyph {
+  display: none;
+}
+/* Keep the portrait inside the painted opening instead of letting it bleed
+   into the artwork's transparent outer margin. */
+.p4-art[data-frame="true"] .p4-art-portrait {
+  inset: 12.5%;
+  width: 75%;
+  height: 75%;
+}
+
 /* --------------------------------------------------------------------------
    3. Per-cosmetic frame treatments
    -------------------------------------------------------------------------- */
@@ -611,6 +639,32 @@
   pointer-events: none;
   background: linear-gradient(180deg, var(--p4-glow), transparent 42%, transparent 62%, var(--p4-glow));
   mix-blend-mode: screen;
+}
+
+/* Graphite Halo ships hand-painted artwork, so the live avatar overlays the
+   real frame instead of the CSS border/glyph. */
+.rr2-root .rr2-profile-avatar[data-cosmetic="graphite"] {
+  border-color: transparent;
+  outline: none;
+  box-shadow: none;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="graphite"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: url("/cosmetics/graphite-halo.png") center / contain no-repeat;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="graphite"] > img {
+  position: absolute;
+  inset: 14%;
+  width: 72%;
+  height: 72%;
+  object-fit: cover;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="graphite"]::after {
+  display: none;
 }
 
 @keyframes p4-avatar-pulse {

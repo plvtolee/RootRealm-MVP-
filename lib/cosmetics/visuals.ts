@@ -30,6 +30,12 @@ export interface CosmeticVisual {
   surface: string;
   /** Soft glow for borders/aura. */
   glow: string;
+  /**
+   * Optional hand-painted frame artwork served from `/public` (transparent
+   * centre). When present it replaces the CSS-drawn frame and corner glyph in
+   * every surface — shop card, banner, inspection panel, and live avatar.
+   */
+  frame?: string;
 }
 
 /**
@@ -47,6 +53,7 @@ export const COSMETIC_VISUALS: Record<string, CosmeticVisual> = {
     accentAlt: '#7d8794',
     surface: '#14171c',
     glow: 'rgba(200, 206, 216, 0.14)',
+    frame: '/cosmetics/graphite-halo.png',
   },
   silverline: {
     slug: 'silverline',
@@ -188,4 +195,8 @@ export function cosmeticVisual(slug: string | null | undefined): CosmeticVisual 
 
 export function cosmeticComposition(slug: string | null | undefined): CosmeticComposition {
   return cosmeticVisual(slug).composition;
+}
+
+export function cosmeticFrame(slug: string | null | undefined): string | undefined {
+  return cosmeticVisual(slug).frame;
 }
