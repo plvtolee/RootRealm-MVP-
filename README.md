@@ -33,7 +33,10 @@ migrations, activity-sync behavior, checks, and deployment.
   static; Legendary and Mythical animate), a detailed inspection panel with a
   profile preview, and purchase/equip/unequip — all backed by the existing
   currency and ownership logic. "The Root Cipher" is a Creator Exclusive Mythical
-  reserved for the account set in `ROOTREALM_CREATOR_USERNAME`.
+  reserved for the account set in `ROOTREALM_CREATOR_USERNAME`; its live artwork
+  is the original dependency-free Canvas 2D runtime in
+  `public/cosmetics/root-cipher/`, featured at the top of the Shop and paused
+  automatically when offscreen.
 - **Quests** — activity-driven milestones with progress, XP + coin rewards, and
   automatic sync on load plus a manual **Sync GitHub** action.
 

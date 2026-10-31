@@ -434,25 +434,8 @@
   opacity: 0.7;
 }
 
-.p4-art[data-cosmetic="root-cipher"] .p4-art-frame {
-  border-width: 3px;
-  border-style: double;
-  box-shadow: 0 0 18px var(--p4-glow), inset 0 0 22px var(--p4-glow);
-}
-.p4-art[data-cosmetic="root-cipher"] .p4-art-frame::before,
-.p4-art[data-cosmetic="root-cipher"] .p4-art-frame::after {
-  content: "";
-  position: absolute;
-  inset: 12%;
-  border: 1px dashed var(--p4-glow);
-  border-radius: 50%;
-}
-.p4-art[data-cosmetic="root-cipher"] .p4-art-frame::before { animation: p4-spin 22s linear infinite; }
-.p4-art[data-cosmetic="root-cipher"] .p4-art-frame::after {
-  inset: 22%;
-  border-style: dotted;
-  animation: p4-spin-rev 16s linear infinite;
-}
+/* The Root Cipher is no longer drawn in CSS — its supplied Canvas 2D runtime
+   and artwork live in `RootCipherFrame` / `public/cosmetics/root-cipher/`. */
 
 /* --------------------------------------------------------------------------
    4. Rarity badges
@@ -543,9 +526,6 @@
 .p4-art[data-cosmetic="astral-horizon"] .p4-art-particles i:nth-child(5) { animation-delay: 2s; }
 .p4-art[data-cosmetic="astral-horizon"] .p4-art-particles i:nth-child(6) { animation-delay: 2.5s; }
 
-.p4-art[data-cosmetic="root-cipher"] .p4-motif { animation: p4-float 6s ease-in-out infinite; }
-.p4-art[data-cosmetic="root-cipher"] .p4-art-badge { animation: p4-crest-shimmer 3.4s ease-in-out infinite; }
-
 @keyframes p4-spin { to { transform: rotate(360deg); } }
 @keyframes p4-spin-rev { to { transform: rotate(-360deg); } }
 @keyframes p4-drift {
@@ -610,10 +590,40 @@
   color: var(--p4-a);
 }
 .rr2-root .rr2-profile-avatar[data-cosmetic="neon-pulse"] { border-width: 2px; }
+/* The Root Cipher paints its own frame + aura on a transparent canvas, and the
+   avatar sits underneath the 14.6% / 15.6% / 68.8% / 63.2% artwork window. */
 .rr2-root .rr2-profile-avatar[data-cosmetic="root-cipher"] {
-  border-width: 2px;
-  box-shadow: 0 0 0 4px var(--p4-glow), 0 0 30px var(--p4-glow);
-  animation: p4-avatar-pulse 5s ease-in-out infinite;
+  padding: 0;
+  border: 0;
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+  animation: none;
+  overflow: visible;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="root-cipher"]::before,
+.rr2-root .rr2-profile-avatar[data-cosmetic="root-cipher"]::after {
+  display: none;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="root-cipher"] > .rc-frame {
+  width: 100%;
+  height: 100%;
+}
+/* The shared profile styles size every avatar <img> to 100%; the Creator frame
+   needs the portrait tucked into the supplied artwork's inner window. */
+.rr2-root .rr2-profile-avatar[data-cosmetic="root-cipher"] .rc-avatar {
+  position: absolute;
+  left: 14.6%;
+  top: 15.6%;
+  width: 68.8%;
+  height: 63.2%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 0;
+  display: block;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="root-cipher"] .rc-fallback {
+  object-fit: contain;
 }
 .rr2-root .rr2-profile-avatar[data-cosmetic="solar-crown"],
 .rr2-root .rr2-profile-avatar[data-cosmetic="wraithlight"],
@@ -623,6 +633,11 @@
 .rr2-root .rr2-profile-avatar[data-rarity="legendary"],
 .rr2-root .rr2-profile-avatar[data-rarity="mythical"] {
   animation: p4-avatar-pulse 6s ease-in-out infinite;
+}
+/* The live canvas owns the aura, so the rarity pulse ring must not double it. */
+.rr2-root .rr2-profile-avatar[data-cosmetic="root-cipher"][data-rarity] {
+  animation: none;
+  box-shadow: none;
 }
 
 .rr2-root .rr2-profile-avatar[data-composition="circle"] { padding: 11px; }
@@ -674,6 +689,69 @@
 .rr2-root .rr2-profile-avatar[data-cosmetic="silverline"]::after {
   display: none;
 }
+
+/* --------------------------------------------------------------------------
+   6b. The Root Cipher — live Canvas 2D frame
+   The supplied 1024×1024 artwork has a transparent avatar window at
+   left 14.6% / top 15.6% / width 68.8% / height 63.2%. The runtime canvas
+   bleeds 15% beyond the square frame so the orbital aura is never clipped.
+   -------------------------------------------------------------------------- */
+.rc-frame {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: visible;
+  isolation: isolate;
+}
+.rc-avatar {
+  position: absolute;
+  left: 14.6%;
+  top: 15.6%;
+  width: 68.8%;
+  height: 63.2%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 1;
+  display: block;
+}
+.rc-avatar-initial {
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 50% 30%, #3a2f18, #100e0a 72%);
+  color: #ffe6a8;
+  font-size: inherit;
+  font-weight: 700;
+  line-height: 1;
+}
+.rc-fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+.rc-frame[data-ready="true"] .rc-fallback { opacity: 0; }
+/* The engine appends its own <canvas>; it must sit above the avatar + fallback. */
+.rc-canvas { z-index: 3; pointer-events: none; }
+
+.rc-frame--card { width: 100%; }
+.rc-frame--hero { width: 100%; max-width: 300px; margin-inline: auto; }
+.rc-frame--inspect { width: 100%; max-width: 260px; margin-inline: auto; }
+
+.p4-release-featured-art.is-cipher { animation: none; }
+.p4-release-featured-note {
+  color: #ffe6a8;
+  font-size: 10px;
+  font-style: normal;
+  letter-spacing: 0.08em;
+}
+.p4-inspect-cipher-reveal { margin-top: 2px; }
+.rr2-cipher-reveal { align-self: flex-start; margin-top: 6px; }
 
 @keyframes p4-avatar-pulse {
   0%, 100% { box-shadow: 0 0 0 4px var(--p4-glow), 0 0 20px var(--p4-glow); }

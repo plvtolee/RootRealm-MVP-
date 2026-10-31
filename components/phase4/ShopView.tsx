@@ -8,6 +8,7 @@ import { FEATURED_RELEASE } from '@/lib/cosmetics/release';
 import { CosmeticArt, RarityBadge } from './CosmeticArt';
 import { InspectDialog } from './InspectDialog';
 import { ReleaseBanner } from './ReleaseBanner';
+import { RootCipherFrame } from './RootCipherFrame';
 
 const NUMBER_FORMAT = new Intl.NumberFormat('en-US');
 
@@ -72,6 +73,7 @@ export function ShopView({
         isCreator={isCreator}
         onInspect={setInspectSlug}
         onExplore={scrollToCatalogue}
+        featuredPaused={Boolean(inspected)}
       />
 
       <div className="p4-catalogue" ref={catalogueRef}>
@@ -180,6 +182,7 @@ export function ShopView({
                 codeCoins={codeCoins}
                 busy={pendingCosmeticId === item.id}
                 isCreator={isCreator}
+                paused={Boolean(inspected)}
                 onInspect={() => setInspectSlug(item.previewValue)}
                 onAction={onCosmeticAction}
               />
@@ -213,6 +216,7 @@ function CosmeticCard({
   codeCoins,
   busy,
   isCreator,
+  paused,
   onInspect,
   onAction,
 }: {
@@ -220,6 +224,7 @@ function CosmeticCard({
   codeCoins: number;
   busy: boolean;
   isCreator: boolean;
+  paused: boolean;
   onInspect: () => void;
   onAction?: (cosmeticId: string, action: CosmeticAction) => void;
 }) {
@@ -227,6 +232,7 @@ function CosmeticCard({
   const exclusiveLocked = cosmetic.isExclusive && !owned;
   const affordable = codeCoins >= cosmetic.cost;
   const isEquipped = cosmetic.action === 'equipped';
+  const isCipher = cosmetic.previewValue === 'root-cipher';
 
   return (
     <article
@@ -239,13 +245,22 @@ function CosmeticCard({
         onClick={onInspect}
         aria-label={`Inspect ${cosmetic.name}`}
       >
-        <CosmeticArt
-          slug={cosmetic.previewValue}
-          rarity={cosmetic.rarity}
-          composition={cosmetic.composition}
-          exclusive={cosmetic.isExclusive}
-          size="card"
-        />
+        {isCipher ? (
+          <RootCipherFrame
+            className="rc-frame--card"
+            quality="low"
+            intensity={0.8}
+            paused={paused}
+          />
+        ) : (
+          <CosmeticArt
+            slug={cosmetic.previewValue}
+            rarity={cosmetic.rarity}
+            composition={cosmetic.composition}
+            exclusive={cosmetic.isExclusive}
+            size="card"
+          />
+        )}
         <span className="p4-card-flag p4-card-flag--rarity" data-rarity={cosmetic.rarity}>
           {RARITY_META[cosmetic.rarity].label}
         </span>

@@ -3,6 +3,7 @@
 import type { RootRealmCosmetic } from '@/components/phase2/types';
 import type { CosmeticRelease } from '@/lib/cosmetics/release';
 import { CosmeticArt, RarityBadge } from './CosmeticArt';
+import { RootCipherFrame } from './RootCipherFrame';
 
 interface ReleaseBannerProps {
   release: CosmeticRelease;
@@ -10,6 +11,8 @@ interface ReleaseBannerProps {
   isCreator: boolean;
   onInspect: (slug: string) => void;
   onExplore: () => void;
+  /** Pause the featured live animation while another surface owns attention. */
+  featuredPaused?: boolean;
 }
 
 /**
@@ -25,12 +28,18 @@ export function ReleaseBanner({
   isCreator,
   onInspect,
   onExplore,
+  featuredPaused = false,
 }: ReleaseBannerProps) {
   const featured = cosmeticsBySlug[release.featuredSlug];
   const spotlight = cosmeticsBySlug[release.spotlightSlug];
   const preview = release.previewSlugs
     .map((slug) => cosmeticsBySlug[slug])
     .filter((item): item is RootRealmCosmetic => Boolean(item));
+
+  const featuredIsCipher = featured?.previewValue === 'root-cipher';
+  const showSpotlight = Boolean(
+    spotlight && spotlight.previewValue !== featured?.previewValue
+  );
 
   const closesAt = release.endsAt ? new Date(release.endsAt) : null;
   const hasWindow = Boolean(closesAt && !Number.isNaN(closesAt.getTime()));
@@ -118,24 +127,42 @@ export function ReleaseBanner({
       <div className="p4-release-showcase">
         {featured ? (
           <div className="p4-release-featured">
-            <div className="p4-release-featured-art">
-              <CosmeticArt
-                slug={featured.previewValue}
-                rarity={featured.rarity}
-                composition={featured.composition}
-                size="hero"
-                label={`${featured.name} artwork`}
-              />
+            <div
+              className={`p4-release-featured-art${featuredIsCipher ? ' is-cipher' : ''}`}
+            >
+              {featuredIsCipher ? (
+                <RootCipherFrame
+                  className="rc-frame--hero"
+                  quality="high"
+                  intensity={1}
+                  autoShowcase
+                  paused={featuredPaused}
+                  label={`${featured.name} — animated artwork`}
+                />
+              ) : (
+                <CosmeticArt
+                  slug={featured.previewValue}
+                  rarity={featured.rarity}
+                  composition={featured.composition}
+                  size="hero"
+                  label={`${featured.name} artwork`}
+                />
+              )}
             </div>
             <div className="p4-release-featured-meta">
-              <RarityBadge rarity={featured.rarity} />
+              <RarityBadge rarity={featured.rarity} exclusive={featured.isExclusive} />
               <strong>{featured.name}</strong>
               <span>{featured.category}</span>
+              {featured.isExclusive ? (
+                <em className="p4-release-featured-note">
+                  {isCreator ? 'Granted to the architect' : 'Reserved for the realm’s creator'}
+                </em>
+              ) : null}
             </div>
           </div>
         ) : null}
 
-        {spotlight ? (
+        {showSpotlight && spotlight ? (
           <button
             type="button"
             className="p4-release-spotlight"

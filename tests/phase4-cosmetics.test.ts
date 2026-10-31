@@ -47,7 +47,8 @@ describe('Phase 4 cosmetic visuals', () => {
     expect(compositions.has('full')).toBe(true);
     expect(compositions.has('square')).toBe(true);
     expect(cosmeticComposition('frostbound')).toBe('circle');
-    expect(cosmeticComposition('root-cipher')).toBe('full');
+    expect(cosmeticComposition('root-cipher')).toBe('square');
+    expect(cosmeticComposition('astral-horizon')).toBe('full');
   });
 
   it('falls back safely for unknown slugs', () => {
@@ -58,9 +59,10 @@ describe('Phase 4 cosmetic visuals', () => {
   it('uses hand-painted frame artwork where supplied', () => {
     expect(cosmeticFrame('graphite')).toBe('/cosmetics/graphite-halo.png');
     expect(cosmeticFrame('silverline')).toBe('/cosmetics/silverline-frame.png');
+    expect(cosmeticFrame('root-cipher')).toBe('/cosmetics/root-cipher/root-cipher-frame.png');
     for (const visual of Object.values(COSMETIC_VISUALS)) {
       if (visual.frame) {
-        expect(visual.frame).toMatch(/^\/cosmetics\/[a-z0-9-]+\.png$/);
+        expect(visual.frame).toMatch(/^\/cosmetics\/(?:[a-z0-9-]+\/)?[a-z0-9-]+\.png$/);
       }
     }
   });

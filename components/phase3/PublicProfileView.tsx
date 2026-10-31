@@ -11,6 +11,7 @@ import {
 } from '@/lib/social/actions';
 import type { PublicProfileData, ConnectionUIStatus } from './types';
 import { CosmeticArt, RarityBadge } from '@/components/phase4/CosmeticArt';
+import { RootCipherFrame } from '@/components/phase4/RootCipherFrame';
 import { cosmeticVisual } from '@/lib/cosmetics/visuals';
 import './Phase3.css';
 
@@ -174,6 +175,7 @@ export function PublicProfileView({
   const xpForNextLevel = 100;
   const xpProgress = Math.round((xpIntoLevel / xpForNextLevel) * 100);
   const displayName = publicProfile.display_name || publicProfile.username;
+  const isCipher = publicProfile.equipped_cosmetic?.preview_value === 'root-cipher';
 
   return (
     <div className="rr2-root rr2-public-profile-root">
@@ -205,7 +207,14 @@ export function PublicProfileView({
             data-rarity={publicProfile.equipped_cosmetic?.rarity}
             aria-label={`Avatar for ${displayName}`}
           >
-            {publicProfile.avatar_url ? (
+            {isCipher ? (
+              <RootCipherFrame
+                quality="medium"
+                intensity={0.9}
+                avatarUrl={publicProfile.avatar_url}
+                avatarInitial={displayName.slice(0, 1).toUpperCase()}
+              />
+            ) : publicProfile.avatar_url ? (
               <img src={publicProfile.avatar_url} alt="" />
             ) : (
               displayName.slice(0, 1).toUpperCase()

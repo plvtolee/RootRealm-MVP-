@@ -40,9 +40,11 @@ export const FEATURED_RELEASE: CosmeticRelease = {
   headline: 'The first artefacts of the realm are here.',
   description:
     'Thirteen original avatar artefacts trace the path from a quiet first frame to the living constellation of a Mythical — culminating in The Root Cipher, forged for the realm’s creator.',
-  featuredSlug: 'astral-horizon',
+  // The Root Cipher opens the Shop alive: its animated canvas is the featured
+  // presentation, and the spotlight config points at the same artefact.
+  featuredSlug: 'root-cipher',
   spotlightSlug: 'root-cipher',
-  previewSlugs: ['graphite', 'frostbound', 'neon-pulse', 'solar-crown', 'root-cipher'],
+  previewSlugs: ['graphite', 'frostbound', 'neon-pulse', 'solar-crown', 'astral-horizon'],
   startsAt: null,
   endsAt: null,
 };

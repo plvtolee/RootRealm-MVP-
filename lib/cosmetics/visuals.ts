@@ -168,13 +168,16 @@ export const COSMETIC_VISUALS: Record<string, CosmeticVisual> = {
   },
   'root-cipher': {
     slug: 'root-cipher',
-    composition: 'full',
+    composition: 'square',
     glyph: '✶',
     motif: 'cipher',
     accent: '#ffe6a8',
     accentAlt: '#8be9d0',
     surface: '#100e0a',
     glow: 'rgba(255, 230, 168, 0.38)',
+    // Opus's original transparent artwork. The live canvas runtime paints the
+    // animated version on top; this still is the loading / no-JS fallback.
+    frame: '/cosmetics/root-cipher/root-cipher-frame.png',
   },
 };
 

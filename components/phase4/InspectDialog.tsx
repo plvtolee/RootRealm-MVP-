@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import type { CosmeticAction, RootRealmCosmetic } from '@/components/phase2/types';
 import { RARITY_META, rarityMeta } from '@/lib/cosmetics/rarity';
 import { CosmeticArt, RarityBadge } from './CosmeticArt';
+import { RootCipherFrame, type RootCipherFrameHandle } from './RootCipherFrame';
 
 interface InspectDialogProps {
   cosmetic: RootRealmCosmetic;
@@ -22,11 +23,11 @@ function effectsFor(cosmetic: RootRealmCosmetic): string[] {
   if (cosmetic.isExclusive) {
     return [
       ...base,
-      'Signature reveal animation',
-      'Counter-rotating rune rings',
-      'Scanning light sweep',
-      'Floating binary motes',
-      'Animated Creator crest',
+      'Living canvas animation',
+      'Golden orbital ribbons',
+      'Floating cipher cubes',
+      'Crown illumination',
+      'Signature showcase reveal',
     ];
   }
 
@@ -55,6 +56,7 @@ export function InspectDialog({
   onClose,
 }: InspectDialogProps) {
   const closeRef = useRef<HTMLButtonElement>(null);
+  const cipherRef = useRef<RootCipherFrameHandle>(null);
 
   useEffect(() => {
     const previous = document.body.style.overflow;
@@ -78,6 +80,7 @@ export function InspectDialog({
   const exclusiveLocked = cosmetic.isExclusive && !owned;
   const affordable = codeCoins >= cosmetic.cost;
   const effects = effectsFor(cosmetic);
+  const isCipher = cosmetic.previewValue === 'root-cipher';
 
   const statusLabel = owned
     ? cosmetic.action === 'equipped'
@@ -164,15 +167,42 @@ export function InspectDialog({
         </button>
 
         <div className="p4-inspect-art">
-          <CosmeticArt
-            slug={cosmetic.previewValue}
-            rarity={cosmetic.rarity}
-            composition={cosmetic.composition}
-            exclusive={cosmetic.isExclusive}
-            size="inspect"
-            label={`${cosmetic.name} artwork`}
-          />
-          <div className="p4-inspect-art-glow" data-rarity={cosmetic.rarity} aria-hidden="true" />
+          {isCipher ? (
+            <>
+              <RootCipherFrame
+                ref={cipherRef}
+                className="rc-frame--inspect"
+                quality="high"
+                intensity={1.05}
+                label={`${cosmetic.name} — animated artwork`}
+              />
+              <button
+                type="button"
+                className="rr2-button rr2-button-secondary p4-inspect-cipher-reveal"
+                onClick={() => {
+                  void cipherRef.current?.showcase();
+                }}
+              >
+                Play signature reveal
+              </button>
+            </>
+          ) : (
+            <>
+              <CosmeticArt
+                slug={cosmetic.previewValue}
+                rarity={cosmetic.rarity}
+                composition={cosmetic.composition}
+                exclusive={cosmetic.isExclusive}
+                size="inspect"
+                label={`${cosmetic.name} artwork`}
+              />
+              <div
+                className="p4-inspect-art-glow"
+                data-rarity={cosmetic.rarity}
+                aria-hidden="true"
+              />
+            </>
+          )}
         </div>
 
         <div className="p4-inspect-body">
@@ -207,7 +237,14 @@ export function InspectDialog({
                 aria-label={`${profile.name} with ${cosmetic.name} equipped`}
                 role="img"
               >
-                {profile.avatarUrl ? (
+                {isCipher ? (
+                  <RootCipherFrame
+                    quality="low"
+                    intensity={0.9}
+                    avatarUrl={profile.avatarUrl}
+                    avatarInitial={profile.initial}
+                  />
+                ) : profile.avatarUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={profile.avatarUrl} alt="" />
                 ) : (
