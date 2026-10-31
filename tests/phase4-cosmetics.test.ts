@@ -57,6 +57,7 @@ describe('Phase 4 cosmetic visuals', () => {
 
   it('uses hand-painted frame artwork where supplied', () => {
     expect(cosmeticFrame('graphite')).toBe('/cosmetics/graphite-halo.png');
+    expect(cosmeticFrame('silverline')).toBe('/cosmetics/silverline-frame.png');
     for (const visual of Object.values(COSMETIC_VISUALS)) {
       if (visual.frame) {
         expect(visual.frame).toMatch(/^\/cosmetics\/[a-z0-9-]+\.png$/);

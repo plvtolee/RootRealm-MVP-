@@ -64,6 +64,7 @@ export const COSMETIC_VISUALS: Record<string, CosmeticVisual> = {
     accentAlt: '#8d98a8',
     surface: '#181c22',
     glow: 'rgba(219, 226, 236, 0.2)',
+    frame: '/cosmetics/silverline-frame.png',
   },
   ledgerline: {
     slug: 'ledgerline',

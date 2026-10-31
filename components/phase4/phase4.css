@@ -14,10 +14,12 @@
 [data-cosmetic="graphite"] {
   --p4-a: #c8ced8; --p4-b: #7d8794; --p4-bg: #14171c;
   --p4-glow: rgba(200, 206, 216, 0.14); --p4-glyph: "▣";
+  --p4-frame-img: url("/cosmetics/graphite-halo.png");
 }
 [data-cosmetic="silverline"] {
   --p4-a: #dbe2ec; --p4-b: #8d98a8; --p4-bg: #181c22;
   --p4-glow: rgba(219, 226, 236, 0.2); --p4-glyph: "◈";
+  --p4-frame-img: url("/cosmetics/silverline-frame.png");
 }
 [data-cosmetic="ledgerline"] {
   --p4-a: #8fb7c9; --p4-b: #4f6b78; --p4-bg: #121a1d;
@@ -643,29 +645,33 @@
   mix-blend-mode: screen;
 }
 
-/* Graphite Halo ships hand-painted artwork, so the live avatar overlays the
-   real frame instead of the CSS border/glyph. */
-.rr2-root .rr2-profile-avatar[data-cosmetic="graphite"] {
+/* Graphite Halo and Silverline ship hand-painted artwork, so the live avatar
+   overlays the real frame instead of the CSS border/glyph. */
+.rr2-root .rr2-profile-avatar[data-cosmetic="graphite"],
+.rr2-root .rr2-profile-avatar[data-cosmetic="silverline"] {
   border: 0;
   outline: none;
   box-shadow: none;
 }
-.rr2-root .rr2-profile-avatar[data-cosmetic="graphite"]::before {
+.rr2-root .rr2-profile-avatar[data-cosmetic="graphite"]::before,
+.rr2-root .rr2-profile-avatar[data-cosmetic="silverline"]::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 3;
   pointer-events: none;
-  background: url("/cosmetics/graphite-halo.png") center / 100% 100% no-repeat;
+  background: var(--p4-frame-img) center / 100% 100% no-repeat;
 }
-.rr2-root .rr2-profile-avatar[data-cosmetic="graphite"] > img {
+.rr2-root .rr2-profile-avatar[data-cosmetic="graphite"] > img,
+.rr2-root .rr2-profile-avatar[data-cosmetic="silverline"] > img {
   position: absolute;
   inset: 7.5%;
   width: 85%;
   height: 85%;
   object-fit: cover;
 }
-.rr2-root .rr2-profile-avatar[data-cosmetic="graphite"]::after {
+.rr2-root .rr2-profile-avatar[data-cosmetic="graphite"]::after,
+.rr2-root .rr2-profile-avatar[data-cosmetic="silverline"]::after {
   display: none;
 }
 
