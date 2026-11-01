@@ -677,6 +677,12 @@
   pointer-events: none;
   background: var(--p4-frame-img) center / 100% 100% no-repeat;
 }
+/* Silverline's artwork carries a slightly larger transparent lip at the top
+   and bottom than Graphite's, which reads as a hairline gap. Crop just that
+   lip so the painted frame meets the box edge like Graphite. */
+.rr2-root .rr2-profile-avatar[data-cosmetic="silverline"]::before {
+  background-size: 101.5% 101.5%;
+}
 .rr2-root .rr2-profile-avatar[data-cosmetic="graphite"] > img,
 .rr2-root .rr2-profile-avatar[data-cosmetic="silverline"] > img {
   position: absolute;
@@ -703,6 +709,12 @@
   aspect-ratio: 1 / 1;
   overflow: visible;
   isolation: isolate;
+  /* The supplied artwork's side rails sit inside the square (only the corner
+     arms reach the edge), so the frame reads smaller than the straight-edged
+     Graphite/Silverline artwork. Scale every surface up so the painted rails
+     meet the box edge like Graphite; the aura bleeds into the freed margin. */
+  transform: scale(var(--rc-frame-scale, 1.1));
+  transform-origin: center;
 }
 .rc-avatar {
   position: absolute;
