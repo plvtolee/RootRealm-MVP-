@@ -1,14 +1,10 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { useRef } from 'react';
 import { LocalTime } from '@/components/local-time';
 import { ShopView as Phase4ShopView } from '@/components/phase4/ShopView';
 import { CosmeticArt, RarityBadge } from '@/components/phase4/CosmeticArt';
-import {
-  RootCipherFrame,
-  type RootCipherFrameHandle,
-} from '@/components/phase4/RootCipherFrame';
+import { RootCipherFrame } from '@/components/phase4/RootCipherFrame';
 import type {
   CosmeticAction,
   Phase2Feedback,
@@ -294,7 +290,6 @@ function ProfileView({
   const xpProgress = clampPercent(
     Math.round((profile.xpIntoLevel / Math.max(profile.xpForNextLevel, 1)) * 100)
   );
-  const cipherRef = useRef<RootCipherFrameHandle>(null);
   const isCipher = profile.avatarFrameId === 'root-cipher';
   const loadoutLabel = isCipher
     ? 'THE ROOT CIPHER · CREATOR EXCLUSIVE'
@@ -351,8 +346,11 @@ function ProfileView({
         >
           {isCipher ? (
             <RootCipherFrame
-              quality="medium"
+              quality="high"
+              pixelRatio={3}
+              maxPixelRatio={4}
               intensity={0.9}
+              autoShowcase
               avatarUrl={profile.avatarUrl}
               avatarInitial={profile.avatarInitial}
             />
@@ -377,17 +375,6 @@ function ProfileView({
             <span className="rr2-profile-tag">SCORING {profile.scoringVersion}</span>
             <span className="rr2-profile-tag">{loadoutLabel}</span>
           </div>
-          {isCipher ? (
-            <button
-              type="button"
-              className="rr2-button rr2-button-secondary rr2-small-button rr2-cipher-reveal"
-              onClick={() => {
-                void cipherRef.current?.showcase();
-              }}
-            >
-              Play signature reveal
-            </button>
-          ) : null}
         </div>
 
         <div className="rr2-profile-xp">

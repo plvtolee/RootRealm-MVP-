@@ -146,6 +146,7 @@
       intensity: opts.intensity != null ? opts.intensity : 1, // idle effect intensity multiplier
       showcaseDuration: opts.showcaseDuration || 5,     // seconds
       returnToIdle: opts.returnToIdle !== false,        // after showcase completes
+      pixelRatio: opts.pixelRatio || 1,                 // supersampling multiplier
       maxPixelRatio: opts.maxPixelRatio || 2,
       maxCanvasSize: opts.maxCanvasSize || 2400,
       reducedMotion: opts.reducedMotion || 'auto',      // 'auto' | true | false
@@ -343,7 +344,8 @@
       active: true, u: u,
       E: energyAt(u),
       charge: smooth(0, 0.55, u) * (1 - smooth(0.62, 0.85, u)),
-      flash: Math.exp(-Math.pow((u - 0.74) / 0.13, 2)),
+      // Keep the signature ignition bright, but soften its flash/glow peak.
+      flash: 0.68 * Math.exp(-Math.pow((u - 0.74) / 0.13, 2)),
       orbit: cum * 2,     // extra ribbon turns (integer total => seamless return to idle)
       spin: cum * 1,      // extra cube turns
       sweep: (u - 0.7) / 1.05,
@@ -374,7 +376,7 @@
     }
     var rect = this.canvas.getBoundingClientRect();
     var cssW = rect.width || (this.container ? this.container.clientWidth * (1 + 2 * b) : 512);
-    var dpr = Math.min(global.devicePixelRatio || 1, this.opts.maxPixelRatio);
+    var dpr = Math.min((global.devicePixelRatio || 1) * this.opts.pixelRatio, this.opts.maxPixelRatio);
     var px = Math.min(Math.round(cssW * dpr), this.opts.maxCanvasSize);
     if (px < 16) px = 16;
     if (this.canvas.width !== px) { this.canvas.width = this.canvas.height = px; }
@@ -536,7 +538,7 @@
   P._drawAura = function (c, t, sc, I) {
     var A = this.auraPad, breath = 0.5 + 0.5 * wave(t, 3);
     var s = 1 + 0.014 * breath * I + 0.1 * sc.E - 0.05 * sc.charge;
-    var a = clamp((0.42 + 0.22 * breath) * I + 0.5 * sc.E + 0.5 * sc.flash - 0.35 * sc.charge, 0, 1);
+    var a = clamp((0.42 + 0.22 * breath) * I + 0.4 * sc.E + 0.4 * sc.flash - 0.35 * sc.charge, 0, 1);
     c.save();
     c.translate(512, 500); c.scale(s, s); c.translate(-512, -500);
     c.globalAlpha = a;
@@ -544,7 +546,7 @@
     if (sc.E > 0.01 || sc.flash > 0.01) {
       c.globalCompositeOperation = 'lighter';
       c.translate(512, 500); c.scale(1.035, 1.035); c.translate(-512, -500);
-      c.globalAlpha = clamp(0.55 * sc.E + 0.6 * sc.flash, 0, 1);
+      c.globalAlpha = clamp(0.44 * sc.E + 0.48 * sc.flash, 0, 1);
       c.drawImage(this.aura, -A, -A, S + 2 * A, S + 2 * A);
     }
     c.restore();
@@ -647,13 +649,13 @@
       var hr = 52;
       var g = fx.createRadialGradient(h.cx + Math.cos(ang) * h.r, h.cy + Math.sin(ang) * h.r, 0,
                                       h.cx + Math.cos(ang) * h.r, h.cy + Math.sin(ang) * h.r, hr);
-      g.addColorStop(0, 'rgba(255,240,190,' + (0.85 * I + 0.15 + sc.E * 0.5) + ')');
+      g.addColorStop(0, 'rgba(255,240,190,' + (0.85 * I + 0.15 + sc.E * 0.4) + ')');
       g.addColorStop(1, 'rgba(255,180,60,0)');
       fx.fillStyle = g;
       fx.fillRect(h.cx + Math.cos(ang) * h.r - hr, h.cy + Math.sin(ang) * h.r - hr, hr * 2, hr * 2);
     }
     if (sc.E > 0.01) {   // whole halo lights up during showcase
-      fx.strokeStyle = 'rgba(255,220,140,' + (0.5 * sc.E) + ')';
+      fx.strokeStyle = 'rgba(255,220,140,' + (0.4 * sc.E) + ')';
       fx.lineWidth = 60;
       fx.beginPath(); fx.arc(h.cx, h.cy, h.r, h.a0 * Math.PI / 180, h.a1 * Math.PI / 180); fx.stroke();
     }
@@ -671,7 +673,7 @@
 
     // showcase: metal glows hot on ignition
     if (sc.flash > 0.01 || sc.E > 0.01) {
-      fx.fillStyle = 'rgba(255,200,110,' + clamp(0.55 * sc.flash + 0.12 * sc.E, 0, 1) + ')';
+      fx.fillStyle = 'rgba(255,200,110,' + clamp(0.44 * sc.flash + 0.1 * sc.E, 0, 1) + ')';
       fx.fillRect(0, 0, S, S);
     }
 
@@ -731,7 +733,7 @@
   P._drawCrown = function (c, t, sc, I) {
     var cr = this.layout.crown;
     var pulse = Math.pow(0.5 + 0.5 * wave(t, 4), 1.6);
-    var a = clamp((0.16 + 0.42 * pulse) * I + 0.7 * sc.E + 0.8 * sc.flash, 0, 2.2);
+    var a = clamp((0.16 + 0.42 * pulse) * I + 0.56 * sc.E + 0.64 * sc.flash, 0, 2.2);
     c.save();
     c.beginPath(); c.arc(cr.x, cr.y, cr.r, 0, TAU); c.clip();
     c.globalCompositeOperation = 'lighter';
@@ -743,14 +745,14 @@
     c.save();
     c.globalCompositeOperation = 'lighter';
     var gr = 70 + 26 * pulse + 60 * sc.E;
-    c.globalAlpha = clamp((0.22 + 0.3 * pulse) * I + 0.5 * sc.E + 0.6 * sc.flash, 0, 1);
+    c.globalAlpha = clamp((0.22 + 0.3 * pulse) * I + 0.4 * sc.E + 0.48 * sc.flash, 0, 1);
     c.drawImage(this.glow, cr.x - gr, cr.y - 6 - gr, gr * 2, gr * 2);
     c.restore();
   };
 
   P._drawCrownRays = function (c, t, sc) {
     if (sc.E < 0.01 && sc.flash < 0.01) return;
-    var cr = this.layout.crown, a = clamp(0.5 * sc.E + 0.6 * sc.flash, 0, 1);
+    var cr = this.layout.crown, a = clamp(0.4 * sc.E + 0.48 * sc.flash, 0, 1);
     var len = 140 + 220 * sc.E;
     c.save();
     c.globalCompositeOperation = 'lighter';

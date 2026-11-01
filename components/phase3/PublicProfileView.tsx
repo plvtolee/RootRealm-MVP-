@@ -209,8 +209,11 @@ export function PublicProfileView({
           >
             {isCipher ? (
               <RootCipherFrame
-                quality="medium"
+                quality="high"
+                pixelRatio={3}
+                maxPixelRatio={4}
                 intensity={0.9}
+                autoShowcase
                 avatarUrl={publicProfile.avatar_url}
                 avatarInitial={displayName.slice(0, 1).toUpperCase()}
               />

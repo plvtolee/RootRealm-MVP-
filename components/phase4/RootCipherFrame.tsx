@@ -35,6 +35,10 @@ export interface RootCipherFrameProps {
   /** CSS length or pixel number. The frame always stays square. */
   size?: number | string;
   quality?: RootCipherQuality;
+  /** Supersample the canvas above the device's native pixel ratio. */
+  pixelRatio?: number;
+  /** Maximum backing-canvas device pixel ratio (runtime default: 2). */
+  maxPixelRatio?: number;
   /** Idle effect multiplier (default 1). */
   intensity?: number;
   /** Edge-triggered showcase request. `autoShowcase` covers mount-time reveals. */
@@ -136,6 +140,8 @@ export const RootCipherFrame = forwardRef<RootCipherFrameHandle, RootCipherFrame
     {
       size = '100%',
       quality = 'auto',
+      pixelRatio = 1,
+      maxPixelRatio = 2,
       intensity = 1,
       state = 'idle',
       autoShowcase = false,
@@ -203,6 +209,8 @@ export const RootCipherFrame = forwardRef<RootCipherFrameHandle, RootCipherFrame
             // never leave a detached animation loop running.
             autoplay: false,
             quality: configRef.current.quality,
+            pixelRatio,
+            maxPixelRatio,
             intensity: configRef.current.intensity,
             pauseWhenHidden: true,
             reducedMotion: 'auto',
@@ -234,7 +242,7 @@ export const RootCipherFrame = forwardRef<RootCipherFrameHandle, RootCipherFrame
         instanceRef.current?.destroy();
         instanceRef.current = null;
       };
-    }, [maybeAutoShowcase]);
+    }, [maybeAutoShowcase, maxPixelRatio, pixelRatio]);
 
     // Keep live options in sync without recreating the instance.
     useEffect(() => {
