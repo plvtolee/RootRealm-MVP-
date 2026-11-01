@@ -608,6 +608,10 @@
 .rr2-root .rr2-profile-avatar[data-cosmetic="root-cipher"] > .rc-frame {
   width: 100%;
   height: 100%;
+  /* The artwork's ornate ring frames a 71%×64% window, versus Graphite's
+     84%×83%. Scale the profile avatar up so the opening reads the same size
+     as Graphite's; the ornament tips stay inside the unmasked aura bleed. */
+  --rc-frame-scale: 1.23;
 }
 /* The shared profile styles size every avatar <img> to 100%; the Creator frame
    needs the portrait tucked into the supplied artwork's inner window. */
