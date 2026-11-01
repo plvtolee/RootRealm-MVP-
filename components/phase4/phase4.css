@@ -852,8 +852,8 @@
   transform: none;
 }
 .rr2-root .rr2-profile-avatar[data-cosmetic="frostbound"]::after { display: none; }
-/* Voidglass Prism at 1.6 scale puts its 67.6% opening at ~108.2% of the avatar
-   box, so a 111.5% portrait fills it with a hairline tuck. The `full`
+/* Voidglass Prism at 1.67 scale puts its 67.6% opening at ~112.9% of the avatar
+   box, so a 116.2% portrait fills it with a hairline tuck. The `full`
    composition normally dims the artwork; the painted frame supplies the mood
    instead. */
 .rr2-root .rr2-profile-avatar[data-cosmetic="voidglass"] {
@@ -871,15 +871,15 @@
   border-radius: 0;
   background: var(--p4-frame-img) center / 100% 100% no-repeat;
   mix-blend-mode: normal;
-  transform: scale(1.6);
+  transform: scale(1.67);
   transform-origin: center;
 }
 .rr2-root .rr2-profile-avatar[data-cosmetic="voidglass"] > img {
   position: absolute;
-  left: -5.75%;
-  top: -5.75%;
-  width: 111.5%;
-  height: 111.5%;
+  left: -8.1%;
+  top: -8.1%;
+  width: 116.2%;
+  height: 116.2%;
   max-width: none;
   object-fit: cover;
   filter: none;
