@@ -22,16 +22,19 @@
   --p4-frame-img: url("/cosmetics/silverline-frame.png");
 }
 [data-cosmetic="ledgerline"] {
-  --p4-a: #8fb7c9; --p4-b: #4f6b78; --p4-bg: #121a1d;
-  --p4-glow: rgba(143, 183, 201, 0.16); --p4-glyph: "⌗";
+  --p4-a: #e5d6b2; --p4-b: #8d846f; --p4-bg: #121a1d;
+  --p4-glow: rgba(229, 214, 178, 0.2); --p4-glyph: "⌗";
+  --p4-frame-img: url("/cosmetics/ledgerline-frame.png");
 }
 [data-cosmetic="aurum-circuit"] {
-  --p4-a: #e8b464; --p4-b: #9a6a2c; --p4-bg: #1e1810;
-  --p4-glow: rgba(232, 180, 100, 0.24); --p4-glyph: "⌁";
+  --p4-a: #f09a5a; --p4-b: #a35a2a; --p4-bg: #1a130d;
+  --p4-glow: rgba(240, 154, 90, 0.26); --p4-glyph: "⌁";
+  --p4-frame-img: url("/cosmetics/aurum-circuit-frame.png");
 }
 [data-cosmetic="frostbound"] {
   --p4-a: #9edcff; --p4-b: #4f8fae; --p4-bg: #10212c;
   --p4-glow: rgba(158, 220, 255, 0.26); --p4-glyph: "❄";
+  --p4-frame-img: url("/cosmetics/frostbound-frame.png");
 }
 [data-cosmetic="ember-index"] {
   --p4-a: #f39a62; --p4-b: #a24a2a; --p4-bg: #241512;
@@ -304,6 +307,61 @@
   inset: 7.5%;
   width: 85%;
   height: 85%;
+  transform: scale(1.17);
+  transform-origin: center;
+}
+.p4-art[data-cosmetic="graphite"][data-frame="true"] .p4-art-frame-image,
+.p4-art[data-cosmetic="silverline"][data-frame="true"] .p4-art-frame-image {
+  transform: scale(0.8);
+  transform-origin: center;
+}
+.p4-art[data-cosmetic="graphite"][data-frame="true"] .p4-art-portrait,
+.p4-art[data-cosmetic="silverline"][data-frame="true"] .p4-art-portrait {
+  transform: scale(0.8);
+  transform-origin: center;
+}
+.p4-art[data-cosmetic="silverline"][data-frame="true"] .p4-art-frame-image,
+.p4-art[data-cosmetic="silverline"][data-frame="true"] .p4-art-portrait {
+  transform: scale(0.82);
+}
+.p4-art[data-cosmetic="ledgerline"][data-frame="true"] .p4-art-frame-image {
+  transform: scale(1);
+  transform-origin: center;
+}
+.p4-art[data-cosmetic="ledgerline"][data-frame="true"] .p4-art-portrait {
+  left: 18%;
+  top: 14.5%;
+  width: 64%;
+  height: 61%;
+  transform: scale(1);
+  transform-origin: center;
+}
+.p4-art[data-cosmetic="aurum-circuit"][data-frame="true"] .p4-art-frame-image {
+  transform: scale(0.97);
+  transform-origin: center;
+}
+.p4-art[data-cosmetic="aurum-circuit"][data-frame="true"] .p4-art-portrait {
+  inset: 14.5% auto auto 15%;
+  width: 69.5%;
+  height: 70%;
+  transform: none;
+}
+/* Frostbound Sigil is a circular ward. Its artwork is trimmed to the ring, so
+   the painted circle already fills the card; the portrait is a circle sized to
+   the measured opening (62.1% of the artwork) plus a hairline tuck. */
+.p4-art[data-cosmetic="frostbound"][data-frame="true"] .p4-art-frame-image {
+  transform: scale(1);
+  transform-origin: center;
+}
+.p4-art[data-cosmetic="frostbound"][data-frame="true"] .p4-art-portrait {
+  inset: auto;
+  left: 18%;
+  top: 18%;
+  width: 64%;
+  height: 64%;
+  transform: none;
+  border-radius: 50%;
+  box-shadow: none;
 }
 
 /* --------------------------------------------------------------------------
@@ -665,10 +723,11 @@
   mix-blend-mode: screen;
 }
 
-/* Graphite Halo and Silverline ship hand-painted artwork, so the live avatar
-   overlays the real frame instead of the CSS border/glyph. */
+/* Graphite Halo, Silverline, and Aurum Circuit ship hand-painted artwork, so
+   the live avatar overlays the real frame instead of the CSS border/glyph. */
 .rr2-root .rr2-profile-avatar[data-cosmetic="graphite"],
-.rr2-root .rr2-profile-avatar[data-cosmetic="silverline"] {
+.rr2-root .rr2-profile-avatar[data-cosmetic="silverline"],
+.rr2-root .rr2-profile-avatar[data-cosmetic="aurum-circuit"] {
   border: 0;
   outline: none;
   box-shadow: none;
@@ -690,6 +749,94 @@
 .rr2-root .rr2-profile-avatar[data-cosmetic="silverline"]::before {
   background-size: 101.5% 101.5%;
 }
+.rr2-root .rr2-profile-avatar[data-cosmetic="ledgerline"] {
+  border: 0;
+  outline: none;
+  box-shadow: none;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="ledgerline"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: var(--p4-frame-img) center / 100% 100% no-repeat;
+  transform: scale(1.7);
+  transform-origin: center;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="ledgerline"] > img {
+  position: absolute;
+  left: 15.75%;
+  top: 10.7%;
+  width: 68.5%;
+  height: 65.5%;
+  object-fit: cover;
+  transform: scale(1.7);
+  transform-origin: center;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="ledgerline"]::after { display: none; }
+/* Aurum Circuit's painting keeps a much wider transparent margin than
+   Graphite/Silverline, so it needs a larger scale for the opening to read at
+   the same size. The portrait is pinned to Aurum's measured window
+   (median 16.3% / 16.4% / 67.3% / 65.9% at scale 1.7) and expanded past 100%
+   so it tucks under the ring. `max-width: none` is essential: Tailwind's
+   preflight sets `img { max-width: 100% }`, which would otherwise clamp the
+   oversized portrait to the left and open a gap on the right. */
+.rr2-root .rr2-profile-avatar[data-cosmetic="aurum-circuit"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: var(--p4-frame-img) center / 100% 100% no-repeat;
+  transform: scale(1.7);
+  transform-origin: center;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="aurum-circuit"] > img {
+  position: absolute;
+  left: -13%;
+  top: -14%;
+  width: 126%;
+  height: 126%;
+  max-width: none;
+  object-fit: cover;
+  transform: none;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="aurum-circuit"]::after { display: none; }
+/* Frostbound Sigil's painting is a circular ward whose opening is 62.1% of the
+   artwork. At the Graphite-matching 1.4 scale that reads as an 87% circle, so
+   the portrait is an 89% centred disc tucked a hair under the rime. `padding: 0`
+   keeps the circle composition's inset from narrowing the painted window. */
+.rr2-root .rr2-profile-avatar[data-cosmetic="frostbound"] {
+  border: 0;
+  outline: none;
+  box-shadow: none;
+  padding: 0;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="frostbound"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  border: 0;
+  border-radius: 0;
+  background: var(--p4-frame-img) center / 100% 100% no-repeat;
+  transform: scale(1.4);
+  transform-origin: center;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="frostbound"] > img {
+  position: absolute;
+  left: 5.5%;
+  top: 5.5%;
+  width: 89%;
+  height: 89%;
+  max-width: none;
+  object-fit: cover;
+  border-radius: 50%;
+  transform: none;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="frostbound"]::after { display: none; }
 .rr2-root .rr2-profile-avatar[data-cosmetic="graphite"] > img,
 .rr2-root .rr2-profile-avatar[data-cosmetic="silverline"] > img {
   position: absolute;
