@@ -52,6 +52,7 @@
 [data-cosmetic="aurora-meridian"] {
   --p4-a: #74e8b2; --p4-b: #b985ff; --p4-bg: #0e1a1c;
   --p4-glow: rgba(116, 232, 178, 0.24); --p4-glyph: "≋";
+  --p4-frame-img: url("/cosmetics/aurora-meridian-frame.png");
 }
 [data-cosmetic="solar-crown"] {
   --p4-a: #ffc65c; --p4-b: #d9772b; --p4-bg: #211a0e;
@@ -377,6 +378,30 @@
   transform: none;
   filter: none;
   box-shadow: none;
+}
+/* Aurora Meridian's painting leaves a 59.9% opening shifted to the lower right
+   (left 24.7% / top 24.8%), so the portrait is pinned to that measured window
+   instead of being centred. The `full` composition's dimmer is dropped so the
+   painted aurora supplies the mood. */
+.p4-art[data-cosmetic="aurora-meridian"][data-frame="true"] .p4-art-frame-image {
+  transform: scale(1);
+  transform-origin: center;
+}
+.p4-art[data-cosmetic="aurora-meridian"][data-frame="true"] .p4-art-portrait {
+  inset: 22.8% auto auto 22.7%;
+  width: 64%;
+  height: 64%;
+  transform: none;
+  filter: none;
+  box-shadow: none;
+  mask-image: url("/cosmetics/aurora-meridian-mask-shop.png");
+  mask-size: 100% 100%;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  -webkit-mask-image: url("/cosmetics/aurora-meridian-mask-shop.png");
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
 }
 
 /* --------------------------------------------------------------------------
@@ -886,6 +911,50 @@
   transform: none;
 }
 .rr2-root .rr2-profile-avatar[data-cosmetic="voidglass"]::after { display: none; }
+/* Aurora Meridian's arch and pillars push the painted opening to the lower
+   right, but the portrait stays centred in the frame (the pillars simply lap
+   over its left edge) so the face does not read as displaced. The mask clips
+   it to the connected opening, which keeps the decorative corner cutout clear.
+   The `full` composition normally screens a gradient over the artwork, so it is
+   reset and the painted frame carries the effect instead. */
+.rr2-root .rr2-profile-avatar[data-cosmetic="aurora-meridian"] {
+  border: 0;
+  outline: none;
+  box-shadow: none;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="aurora-meridian"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  border: 0;
+  border-radius: 0;
+  background: var(--p4-frame-img) center / 100% 100% no-repeat;
+  mix-blend-mode: normal;
+  transform: scale(1.67);
+  transform-origin: center;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="aurora-meridian"] > img {
+  position: absolute;
+  left: -8.1%;
+  top: -8.1%;
+  width: 116.2%;
+  height: 116.2%;
+  max-width: none;
+  object-fit: cover;
+  filter: none;
+  transform: none;
+  mask-image: url("/cosmetics/aurora-meridian-mask-profile.png");
+  mask-size: 100% 100%;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  -webkit-mask-image: url("/cosmetics/aurora-meridian-mask-profile.png");
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="aurora-meridian"]::after { display: none; }
 .rr2-root .rr2-profile-avatar[data-cosmetic="graphite"] > img,
 .rr2-root .rr2-profile-avatar[data-cosmetic="silverline"] > img {
   position: absolute;

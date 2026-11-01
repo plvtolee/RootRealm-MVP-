@@ -139,6 +139,7 @@ export const COSMETIC_VISUALS: Record<string, CosmeticVisual> = {
     accentAlt: '#b985ff',
     surface: '#0e1a1c',
     glow: 'rgba(116, 232, 178, 0.24)',
+    frame: '/cosmetics/aurora-meridian-frame.png',
   },
   'solar-crown': {
     slug: 'solar-crown',
