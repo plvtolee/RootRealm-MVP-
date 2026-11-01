@@ -804,9 +804,9 @@
 }
 .rr2-root .rr2-profile-avatar[data-cosmetic="aurum-circuit"]::after { display: none; }
 /* Frostbound Sigil's painting is a circular ward whose opening is 62.1% of the
-   artwork. At 1.7 scale that reads as a 105.6% circle, so the portrait is a
-   108% centred disc tucked a hair under the rime. `padding: 0` keeps the circle
-   composition's inset from narrowing the painted window. */
+   artwork. At 1.67 scale that reads as a 103.8% circle, so the portrait is a
+   106.1% centred disc tucked a hair under the rime. `padding: 0` keeps the
+   circle composition's inset from narrowing the painted window. */
 .rr2-root .rr2-profile-avatar[data-cosmetic="frostbound"] {
   border: 0;
   outline: none;
@@ -822,15 +822,15 @@
   border: 0;
   border-radius: 0;
   background: var(--p4-frame-img) center / 100% 100% no-repeat;
-  transform: scale(1.7);
+  transform: scale(1.67);
   transform-origin: center;
 }
 .rr2-root .rr2-profile-avatar[data-cosmetic="frostbound"] > img {
   position: absolute;
-  left: -4%;
-  top: -4%;
-  width: 108%;
-  height: 108%;
+  left: -3.05%;
+  top: -3.05%;
+  width: 106.1%;
+  height: 106.1%;
   max-width: none;
   object-fit: cover;
   border-radius: 50%;
