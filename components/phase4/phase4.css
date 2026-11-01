@@ -47,6 +47,7 @@
 [data-cosmetic="voidglass"] {
   --p4-a: #c0a6ff; --p4-b: #5b4a8a; --p4-bg: #121020;
   --p4-glow: rgba(192, 166, 255, 0.24); --p4-glyph: "◬";
+  --p4-frame-img: url("/cosmetics/voidglass-frame.png");
 }
 [data-cosmetic="aurora-meridian"] {
   --p4-a: #74e8b2; --p4-b: #b985ff; --p4-bg: #0e1a1c;
@@ -361,6 +362,20 @@
   height: 64%;
   transform: none;
   border-radius: 50%;
+  box-shadow: none;
+}
+/* Voidglass Prism's painting carries a 67.6% opening centred at ~50.3%/50.2%.
+   The portrait is a square tucked just under the frame's inner lip. */
+.p4-art[data-cosmetic="voidglass"][data-frame="true"] .p4-art-frame-image {
+  transform: scale(1);
+  transform-origin: center;
+}
+.p4-art[data-cosmetic="voidglass"][data-frame="true"] .p4-art-portrait {
+  inset: 14.4% auto auto 14.5%;
+  width: 71.6%;
+  height: 71.6%;
+  transform: none;
+  filter: none;
   box-shadow: none;
 }
 
@@ -837,6 +852,39 @@
   transform: none;
 }
 .rr2-root .rr2-profile-avatar[data-cosmetic="frostbound"]::after { display: none; }
+/* Voidglass Prism at 1.4 scale puts its 67.6% opening at ~94.6% of the avatar
+   box, so a 98% portrait fills it with a hairline tuck. The `full` composition
+   normally dims the artwork; the painted frame supplies the mood instead. */
+.rr2-root .rr2-profile-avatar[data-cosmetic="voidglass"] {
+  border: 0;
+  outline: none;
+  box-shadow: none;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="voidglass"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  border: 0;
+  border-radius: 0;
+  background: var(--p4-frame-img) center / 100% 100% no-repeat;
+  mix-blend-mode: normal;
+  transform: scale(1.4);
+  transform-origin: center;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="voidglass"] > img {
+  position: absolute;
+  left: 1%;
+  top: 1%;
+  width: 98%;
+  height: 98%;
+  max-width: none;
+  object-fit: cover;
+  filter: none;
+  transform: none;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="voidglass"]::after { display: none; }
 .rr2-root .rr2-profile-avatar[data-cosmetic="graphite"] > img,
 .rr2-root .rr2-profile-avatar[data-cosmetic="silverline"] > img {
   position: absolute;

@@ -128,6 +128,7 @@ export const COSMETIC_VISUALS: Record<string, CosmeticVisual> = {
     accentAlt: '#5b4a8a',
     surface: '#121020',
     glow: 'rgba(192, 166, 255, 0.24)',
+    frame: '/cosmetics/voidglass-frame.png',
   },
   'aurora-meridian': {
     slug: 'aurora-meridian',
