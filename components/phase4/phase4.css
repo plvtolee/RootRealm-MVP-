@@ -39,6 +39,7 @@
 [data-cosmetic="ember-index"] {
   --p4-a: #f39a62; --p4-b: #a24a2a; --p4-bg: #241512;
   --p4-glow: rgba(243, 154, 98, 0.26); --p4-glyph: "◭";
+  --p4-frame-img: url("/cosmetics/ember-index-frame.png");
 }
 [data-cosmetic="neon-pulse"] {
   --p4-a: #7cf4e7; --p4-b: #2a8f88; --p4-bg: #0f2426;
@@ -399,6 +400,29 @@
   mask-position: center;
   mask-repeat: no-repeat;
   -webkit-mask-image: url("/cosmetics/aurora-meridian-mask-shop.png");
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+}
+/* Ember Index's painting is a thin obsidian border around an ~81% opening.
+   The portrait is centred and clipped to the opening; the corner shards lap
+   over it. */
+.p4-art[data-cosmetic="ember-index"][data-frame="true"] .p4-art-frame-image {
+  transform: scale(1);
+  transform-origin: center;
+}
+.p4-art[data-cosmetic="ember-index"][data-frame="true"] .p4-art-portrait {
+  inset: 7.5% auto auto 7.5%;
+  width: 85%;
+  height: 85%;
+  transform: none;
+  filter: none;
+  box-shadow: none;
+  mask-image: url("/cosmetics/ember-index-mask-shop.png");
+  mask-size: 100% 100%;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  -webkit-mask-image: url("/cosmetics/ember-index-mask-shop.png");
   -webkit-mask-size: 100% 100%;
   -webkit-mask-position: center;
   -webkit-mask-repeat: no-repeat;
@@ -955,6 +979,48 @@
   -webkit-mask-repeat: no-repeat;
 }
 .rr2-root .rr2-profile-avatar[data-cosmetic="aurora-meridian"]::after { display: none; }
+/* Ember Index's obsidian border is thinner than the other painted frames, so
+   at 1.4 its ~81% opening reads at ~113% of the avatar box (matching
+   Voidglass) while the outer square matches Graphite. The portrait is centred
+   and the mask clips it to the opening; the shards lap its corners. */
+.rr2-root .rr2-profile-avatar[data-cosmetic="ember-index"] {
+  border: 0;
+  outline: none;
+  box-shadow: none;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="ember-index"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  border: 0;
+  border-radius: 0;
+  background: var(--p4-frame-img) center / 100% 100% no-repeat;
+  mix-blend-mode: normal;
+  transform: scale(1.4);
+  transform-origin: center;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="ember-index"] > img {
+  position: absolute;
+  left: -10%;
+  top: -10%;
+  width: 120%;
+  height: 120%;
+  max-width: none;
+  object-fit: cover;
+  filter: none;
+  transform: none;
+  mask-image: url("/cosmetics/ember-index-mask-profile.png");
+  mask-size: 100% 100%;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  -webkit-mask-image: url("/cosmetics/ember-index-mask-profile.png");
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="ember-index"]::after { display: none; }
 .rr2-root .rr2-profile-avatar[data-cosmetic="graphite"] > img,
 .rr2-root .rr2-profile-avatar[data-cosmetic="silverline"] > img {
   position: absolute;

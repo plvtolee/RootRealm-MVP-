@@ -108,6 +108,7 @@ export const COSMETIC_VISUALS: Record<string, CosmeticVisual> = {
     accentAlt: '#a24a2a',
     surface: '#241512',
     glow: 'rgba(243, 154, 98, 0.26)',
+    frame: '/cosmetics/ember-index-frame.png',
   },
   'neon-pulse': {
     slug: 'neon-pulse',
