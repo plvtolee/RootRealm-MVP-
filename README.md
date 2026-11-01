@@ -28,8 +28,9 @@ migrations, activity-sync behavior, checks, and deployment.
 
 - **Profile** — avatar with equipped border, level, total XP, XP progress, coins,
   quests completed, and GitHub sync status.
-- **Shop** — the "Genesis Codex" cosmetic collection: a Limited Mythic Release
-  banner, rarity/category filters, an animated catalogue (Common/Rare/Epic are
+- **Shop** — the "Genesis Codex" cosmetic collection: a cinematic "New Release"
+  banner whose right panel runs the live Root Cipher artwork, rarity/category
+  filters, an animated catalogue (Common/Rare/Epic are
   static; Legendary and Mythical animate), a detailed inspection panel with a
   profile preview, and purchase/equip/unequip — all backed by the existing
   currency and ownership logic. "The Root Cipher" is a Creator Exclusive Mythical

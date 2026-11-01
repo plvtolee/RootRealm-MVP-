@@ -36,7 +36,7 @@ export const FEATURED_RELEASE: CosmeticRelease = {
   id: 'genesis-codex',
   collection: 'Genesis Codex',
   series: 'Series I · Origin Collection',
-  badge: 'LIMITED MYTHIC RELEASE',
+  badge: 'NEW RELEASE',
   headline: 'The first artefacts of the realm are here.',
   description:
     'Thirteen original avatar artefacts trace the path from a quiet first frame to the living constellation of a Mythical — culminating in The Root Cipher, forged for the realm’s creator.',

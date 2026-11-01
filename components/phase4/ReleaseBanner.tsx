@@ -3,7 +3,7 @@
 import type { RootRealmCosmetic } from '@/components/phase2/types';
 import type { CosmeticRelease } from '@/lib/cosmetics/release';
 import { CosmeticArt, RarityBadge } from './CosmeticArt';
-import { RootCipherFrame } from './RootCipherFrame';
+import { CipherReleaseBanner } from './CipherReleaseBanner';
 
 interface ReleaseBannerProps {
   release: CosmeticRelease;
@@ -37,6 +37,20 @@ export function ReleaseBanner({
     .filter((item): item is RootRealmCosmetic => Boolean(item));
 
   const featuredIsCipher = featured?.previewValue === 'root-cipher';
+
+  // The Root Cipher opens the shop with a bespoke cinematic banner whose right
+  // panel is the live Canvas 2D artwork rather than a static image.
+  if (featuredIsCipher && featured) {
+    return (
+      <CipherReleaseBanner
+        cosmetic={featured}
+        badge={release.badge}
+        paused={featuredPaused}
+        onInspect={() => onInspect(featured.previewValue)}
+      />
+    );
+  }
+
   const showSpotlight = Boolean(
     spotlight && spotlight.previewValue !== featured?.previewValue
   );
@@ -127,27 +141,14 @@ export function ReleaseBanner({
       <div className="p4-release-showcase">
         {featured ? (
           <div className="p4-release-featured">
-            <div
-              className={`p4-release-featured-art${featuredIsCipher ? ' is-cipher' : ''}`}
-            >
-              {featuredIsCipher ? (
-                <RootCipherFrame
-                  className="rc-frame--hero"
-                  quality="high"
-                  intensity={1}
-                  autoShowcase
-                  paused={featuredPaused}
-                  label={`${featured.name} — animated artwork`}
-                />
-              ) : (
-                <CosmeticArt
-                  slug={featured.previewValue}
-                  rarity={featured.rarity}
-                  composition={featured.composition}
-                  size="hero"
-                  label={`${featured.name} artwork`}
-                />
-              )}
+            <div className="p4-release-featured-art">
+              <CosmeticArt
+                slug={featured.previewValue}
+                rarity={featured.rarity}
+                composition={featured.composition}
+                size="hero"
+                label={`${featured.name} artwork`}
+              />
             </div>
             <div className="p4-release-featured-meta">
               <RarityBadge rarity={featured.rarity} exclusive={featured.isExclusive} />

@@ -756,10 +756,8 @@
 .rc-canvas { z-index: 3; pointer-events: none; }
 
 .rc-frame--card { width: 100%; }
-.rc-frame--hero { width: 100%; max-width: 300px; margin-inline: auto; }
 .rc-frame--inspect { width: 100%; max-width: 260px; margin-inline: auto; }
 
-.p4-release-featured-art.is-cipher { animation: none; }
 .p4-release-featured-note {
   color: #ffe6a8;
   font-size: 10px;
@@ -929,6 +927,246 @@
 .p4-release-spotlight-copy strong { font-size: 14px; font-weight: 650; }
 .p4-release-spotlight-copy em { color: var(--rr2-muted); font-size: 10px; font-style: normal; }
 .p4-release-spotlight-arrow { margin-left: auto; color: #ffe6a8; font-size: 16px; }
+
+/* --------------------------------------------------------------------------
+   7b. Cinematic Root Cipher release banner
+   The shop's featured Root Cipher release gets a bespoke gold-on-black plaque
+   whose right panel is the live Canvas 2D artwork, not a static image.
+   -------------------------------------------------------------------------- */
+.rr2-root .p4-cipher-banner {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
+  align-items: center;
+  gap: 26px;
+  margin-bottom: 36px;
+  padding: 44px 48px;
+  border: 1px solid rgba(196, 152, 78, 0.42);
+  background:
+    radial-gradient(ellipse 44% 76% at 72% 50%, rgba(214, 160, 64, 0.22), transparent 70%),
+    radial-gradient(ellipse 62% 92% at 16% 46%, rgba(150, 112, 48, 0.1), transparent 72%),
+    linear-gradient(128deg, #100c07 0%, #090705 46%, #140e07 100%);
+  overflow: hidden;
+  isolation: isolate;
+  animation: p4-reveal 0.7s ease both;
+}
+/* Hairline plaque border, inset like the reference artwork. */
+.rr2-root .p4-cipher-banner::before {
+  content: "";
+  position: absolute;
+  inset: 11px;
+  z-index: 0;
+  border: 1px solid rgba(210, 166, 90, 0.3);
+  pointer-events: none;
+}
+
+.p4-cipher-glow {
+  position: absolute;
+  top: 50%;
+  left: 73%;
+  z-index: 0;
+  width: min(430px, 44%);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(222, 166, 70, 0.24), transparent 62%);
+  filter: blur(10px);
+  pointer-events: none;
+}
+.p4-cipher-orbit {
+  position: absolute;
+  top: 50%;
+  left: 73%;
+  z-index: 0;
+  width: min(520px, 52%);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(214, 168, 92, 0.16);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.p4-cipher-orbit::before,
+.p4-cipher-orbit::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+}
+.p4-cipher-orbit::before {
+  inset: 12%;
+  border: 1px dashed rgba(214, 168, 92, 0.1);
+}
+.p4-cipher-orbit::after {
+  inset: -7%;
+  border: 1px solid rgba(214, 168, 92, 0.07);
+  border-right-color: transparent;
+  border-left-color: transparent;
+  transform: rotate(28deg);
+}
+
+.p4-cipher-spark {
+  position: absolute;
+  z-index: 1;
+  width: 9px;
+  height: 9px;
+  background: linear-gradient(135deg, #ffeec4, #c9963f);
+  box-shadow: 0 0 14px rgba(255, 216, 146, 0.65);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+.p4-cipher-spark--tl { top: 27%; left: 56%; }
+.p4-cipher-spark--tr { top: 23%; left: 88%; }
+.p4-cipher-spark--bl { top: 71%; left: 56%; }
+.p4-cipher-spark--br { top: 74%; left: 88%; }
+
+.p4-cipher-copy {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.p4-cipher-wordmark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: 24px;
+  color: #dcc69a;
+  font-family: "Cinzel", "Trajan Pro", Georgia, "Times New Roman", serif;
+  font-size: 14px;
+  letter-spacing: 0.44em;
+  text-indent: 0.44em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.p4-cipher-rule {
+  width: clamp(44px, 8vw, 92px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(214, 168, 92, 0.72));
+}
+.p4-cipher-wordmark .p4-cipher-rule:last-child {
+  background: linear-gradient(90deg, rgba(214, 168, 92, 0.72), transparent);
+}
+
+.p4-cipher-badge {
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 8px 26px;
+  border: 1px solid rgba(214, 168, 92, 0.62);
+  border-radius: 3px;
+  color: #ecd6a4;
+  background: rgba(214, 168, 92, 0.05);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.4em;
+  text-indent: 0.4em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.rr2-root .p4-cipher-title {
+  margin: 0 0 18px;
+  font-family: "Cinzel", "Trajan Pro", Georgia, "Times New Roman", serif;
+  font-size: clamp(34px, 4.6vw, 60px);
+  font-weight: 500;
+  line-height: 0.98;
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+  color: #f4e7cc;
+  background: linear-gradient(180deg, #fff7e8 6%, #f2e2c2 46%, #d3ab68 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 22px rgba(214, 168, 92, 0.18));
+}
+
+.p4-cipher-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: min(380px, 84%);
+  margin: 0 auto 14px;
+}
+.p4-cipher-divider > span {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(214, 168, 92, 0.6));
+}
+.p4-cipher-divider > span:last-child {
+  background: linear-gradient(90deg, rgba(214, 168, 92, 0.6), transparent);
+}
+.p4-cipher-crown { width: 28px; height: 20px; flex: none; }
+
+.p4-cipher-exclusive {
+  margin-bottom: 18px;
+  color: #d8c39a;
+  font-size: 11px;
+  letter-spacing: 0.46em;
+  text-indent: 0.46em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.p4-cipher-description {
+  margin: 0;
+  max-width: 480px;
+  color: #c3b190;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 15px;
+  font-style: italic;
+  line-height: 1.7;
+}
+
+.p4-cipher-art {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  justify-self: center;
+  width: min(320px, 100%);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.p4-cipher-art:focus-visible {
+  outline: 1px solid rgba(214, 168, 92, 0.7);
+  outline-offset: 10px;
+}
+.p4-cipher-art .rc-frame {
+  width: min(320px, 100%);
+  --rc-frame-scale: 1.12;
+}
+
+@media (max-width: 900px) {
+  .rr2-root .p4-cipher-banner {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 32px 26px 38px;
+  }
+  .p4-cipher-art {
+    order: -1;
+    width: min(268px, 76%);
+  }
+  .p4-cipher-art .rc-frame { width: min(268px, 100%); }
+  .p4-cipher-glow,
+  .p4-cipher-orbit {
+    top: 30%;
+    left: 50%;
+    width: min(400px, 92%);
+  }
+  .p4-cipher-spark { display: none; }
+}
+
+@media (max-width: 560px) {
+  .rr2-root .p4-cipher-banner { padding: 28px 18px 32px; }
+  .p4-cipher-wordmark { font-size: 11px; gap: 12px; margin-bottom: 18px; }
+  .p4-cipher-description { font-size: 13.5px; }
+  .p4-cipher-art { width: min(224px, 82%); }
+  .p4-cipher-art .rc-frame { width: min(224px, 100%); }
+}
 
 @keyframes p4-grid-drift {
   from { background-position: 0 0; }
@@ -1280,6 +1518,8 @@
   .p4-art *,
   .p4-release,
   .p4-release *,
+  .p4-cipher-banner,
+  .p4-cipher-banner *,
   .p4-inspect,
   .p4-rarity,
   .rr2-root .rr2-profile-avatar[data-cosmetic],
