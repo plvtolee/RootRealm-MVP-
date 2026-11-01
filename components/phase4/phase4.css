@@ -404,17 +404,18 @@
   -webkit-mask-position: center;
   -webkit-mask-repeat: no-repeat;
 }
-/* Ember Index's painting is a thin obsidian border around an ~81% opening.
-   The portrait is centred and clipped to the opening; the corner shards lap
-   over it. */
+/* Ember Index's painting is an obsidian border around a ~77% opening. Its
+   opaque square fills ~94% of the asset, so at the shared 1x shop scale it
+   reads the same size as the other painted frames. The portrait is centred
+   and clipped to the opening; the corner shards lap over it. */
 .p4-art[data-cosmetic="ember-index"][data-frame="true"] .p4-art-frame-image {
   transform: scale(1);
   transform-origin: center;
 }
 .p4-art[data-cosmetic="ember-index"][data-frame="true"] .p4-art-portrait {
-  inset: 7.5% auto auto 7.5%;
-  width: 85%;
-  height: 85%;
+  inset: 5.4% auto auto 5.4%;
+  width: 89.1%;
+  height: 89.1%;
   transform: none;
   filter: none;
   box-shadow: none;
@@ -979,10 +980,10 @@
   -webkit-mask-repeat: no-repeat;
 }
 .rr2-root .rr2-profile-avatar[data-cosmetic="aurora-meridian"]::after { display: none; }
-/* Ember Index's obsidian border is thinner than the other painted frames, so
-   at 1.4 its ~81% opening reads at ~113% of the avatar box (matching
-   Voidglass) while the outer square matches Graphite. The portrait is centred
-   and the mask clips it to the opening; the shards lap its corners. */
+/* Ember Index's obsidian square fills ~94% of its asset and its opening is
+   ~77%, so at the shared 1.67 profile scale the outer square matches the other
+   painted frames while the window reads ~129% of the avatar box. The portrait
+   is centred and the mask clips it to the opening; the shards lap its corners. */
 .rr2-root .rr2-profile-avatar[data-cosmetic="ember-index"] {
   border: 0;
   outline: none;
@@ -998,15 +999,15 @@
   border-radius: 0;
   background: var(--p4-frame-img) center / 100% 100% no-repeat;
   mix-blend-mode: normal;
-  transform: scale(1.4);
+  transform: scale(1.67);
   transform-origin: center;
 }
 .rr2-root .rr2-profile-avatar[data-cosmetic="ember-index"] > img {
   position: absolute;
-  left: -10%;
-  top: -10%;
-  width: 120%;
-  height: 120%;
+  left: -23.8%;
+  top: -23.8%;
+  width: 147.5%;
+  height: 147.5%;
   max-width: none;
   object-fit: cover;
   filter: none;
