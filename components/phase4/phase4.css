@@ -39,7 +39,7 @@
 [data-cosmetic="ember-index"] {
   --p4-a: #f39a62; --p4-b: #a24a2a; --p4-bg: #241512;
   --p4-glow: rgba(243, 154, 98, 0.26); --p4-glyph: "◭";
-  --p4-frame-img: url("/cosmetics/ember-index-frame.png");
+  --p4-frame-img: url("/cosmetics/ember-index-frame-v2.png");
 }
 [data-cosmetic="neon-pulse"] {
   --p4-a: #7cf4e7; --p4-b: #2a8f88; --p4-bg: #0f2426;
@@ -405,25 +405,27 @@
   -webkit-mask-repeat: no-repeat;
 }
 /* Ember Index's painting is an obsidian border around a ~77% opening. Its
-   opaque square fills ~94% of the asset, so at the shared 1x shop scale it
-   reads the same size as the other painted frames. The portrait is centred
-   and clipped to the opening; the corner shards lap over it. */
+   opaque square fills ~94% of the asset, so the shop renders the whole frame
+   at 0.9x to sit alongside the other painted frames (Ledgerline/Aurum) rather
+   than oversized. The portrait and its mask scale together so the opening
+   stays aligned, and the corner shards lap over the avatar. */
 .p4-art[data-cosmetic="ember-index"][data-frame="true"] .p4-art-frame-image {
-  transform: scale(1);
+  transform: scale(0.9);
   transform-origin: center;
 }
 .p4-art[data-cosmetic="ember-index"][data-frame="true"] .p4-art-portrait {
   inset: 5.4% auto auto 5.4%;
   width: 89.1%;
   height: 89.1%;
-  transform: none;
+  transform: scale(0.9);
+  transform-origin: center;
   filter: none;
   box-shadow: none;
-  mask-image: url("/cosmetics/ember-index-mask-shop.png");
+  mask-image: url("/cosmetics/ember-index-mask-shop-v2.png");
   mask-size: 100% 100%;
   mask-position: center;
   mask-repeat: no-repeat;
-  -webkit-mask-image: url("/cosmetics/ember-index-mask-shop.png");
+  -webkit-mask-image: url("/cosmetics/ember-index-mask-shop-v2.png");
   -webkit-mask-size: 100% 100%;
   -webkit-mask-position: center;
   -webkit-mask-repeat: no-repeat;
@@ -1012,11 +1014,11 @@
   object-fit: cover;
   filter: none;
   transform: none;
-  mask-image: url("/cosmetics/ember-index-mask-profile.png");
+  mask-image: url("/cosmetics/ember-index-mask-profile-v2.png");
   mask-size: 100% 100%;
   mask-position: center;
   mask-repeat: no-repeat;
-  -webkit-mask-image: url("/cosmetics/ember-index-mask-profile.png");
+  -webkit-mask-image: url("/cosmetics/ember-index-mask-profile-v2.png");
   -webkit-mask-size: 100% 100%;
   -webkit-mask-position: center;
   -webkit-mask-repeat: no-repeat;
