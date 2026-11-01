@@ -80,16 +80,16 @@
 .rr2-row-between { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 /* Profile */
 .rr2-profile-hero { position: relative; display: grid; grid-template-columns: 116px minmax(0, 1fr) auto; align-items: center; gap: 23px; padding: 25px; border: 1px solid var(--rr2-line-bright); background: radial-gradient(ellipse at 15% 50%, rgba(202,209,221,.08), transparent 37%), #1a1d24; }
-.rr2-profile-avatar { position: relative; display: grid; place-items: center; width: 98px; height: 98px; border: 1px solid #d4d9e2; outline: 1px dashed rgba(202,209,221,.38); outline-offset: 5px; color: #d4d9e2; background: radial-gradient(circle at 50% 30%, #333943, #12151a 69%); font-size: 37px; font-weight: 700; }
+.rr2-profile-avatar { position: relative; transform: translateX(12px); display: grid; place-items: center; width: 98px; height: 98px; border: 1px solid #d4d9e2; outline: 1px dashed rgba(202,209,221,.38); outline-offset: 5px; color: #d4d9e2; background: radial-gradient(circle at 50% 30%, #333943, #12151a 69%); font-size: 37px; font-weight: 700; }
 .rr2-profile-avatar::after { content: "✳"; position: absolute; right: -9px; bottom: -3px; display: grid; place-items: center; width: 25px; height: 25px; border: 1px solid var(--rr2-accent-soft); background: #1b1309; font-size: 14px; }
-.rr2-profile-identity .rr2-kicker { font-size: 9px; }
-.rr2-profile-identity h2 { margin: 6px 0 2px; font-size: 27px; font-weight: 620; letter-spacing: -.03em; }
-.rr2-profile-identity p { margin: 0; color: var(--rr2-muted); font-size: 12px; }
-.rr2-profile-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 11px; }
+.rr2-profile-identity .rr2-kicker { margin-left: 12px; font-size: 9px; }
+.rr2-profile-identity h2 { margin: 6px 0 2px; font-size: 27px; font-weight: 620; margin-left: 12px; letter-spacing: -.03em; }
+.rr2-profile-identity p { margin: 0; color: var(--rr2-muted); margin-left: 12px; font-size: 12px; }
+.rr2-profile-tags { display: flex; margin-left: 12px;flex-wrap: wrap; gap: 7px; margin-top: 11px; }
 .rr2-profile-tag { padding: 4px 7px; border: 1px solid var(--rr2-line); color: var(--rr2-muted); font-size: 9px; }
 .rr2-profile-tag strong { color: var(--rr2-accent); font-weight: 600; }
-.rr2-profile-xp { align-self: start; display: flex; flex-direction: column; align-items: end; gap: 8px; min-width: 138px; }
-.rr2-profile-xp .rr2-kicker { font-size: 9px; }
+.rr2-profile-xp { align-self: start; margin-left: 12px; display: flex; flex-direction: column; align-items: end; gap: 8px; min-width: 138px; }
+.rr2-profile-xp .rr2-kicker {  font-size: 9px; }
 .rr2-profile-xp > strong { font-size: 18px; font-weight: 620; }
 .rr2-profile-xp small { color: var(--rr2-dim); font-size: 9px; }
 .rr2-profile-summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 11px; margin: 18px 0; }
@@ -123,8 +123,14 @@
 .rr2-achievement-state { display: block; margin-top: 7px; color: var(--rr2-dim); font-size: 8px; letter-spacing: .06em; }
 .rr2-achievement.is-unlocked .rr2-achievement-state { color: var(--rr2-success); }
 .rr2-loadout { display: flex; flex-wrap: wrap; gap: 10px; }
-.rr2-loadout-chip { display: flex; align-items: center; gap: 8px; padding: 9px; border: 1px solid var(--rr2-line); color: var(--rr2-muted); font-size: 10px; }
+.rr2-loadout-chip { display: flex; align-items: center; gap: 14px; width: min(100%, 520px); min-width: 0; padding: 9px; border: 1px solid var(--rr2-line); color: var(--rr2-muted); font-size: 10px; }
 .rr2-loadout-chip strong { display: block; color: var(--rr2-text); font-size: 10px; font-weight: 600; }
+.rr2-loadout-chip > span { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 14px; min-width: 0; flex: 1; }
+.rr2-loadout-chip > span strong { grid-column: 1; grid-row: 1; min-width: 0; }
+.rr2-loadout-chip > span small { grid-column: 1; grid-row: 2; }
+.rr2-loadout-chip > span .p4-rarity { grid-column: 2; grid-row: 1 / span 2; justify-self: end; white-space: nowrap; }
+.rr2-loadout-cipher-frame { position: relative; flex: 0 0 72px; width: 72px; height: 72px; overflow: visible; }
+.rr2-loadout-cipher-frame > .rc-frame { width: 100%; height: 100%; }
 .rr2-cosmetic-art { display: grid; place-items: center; flex: 0 0 auto; width: 35px; height: 35px; border: 1px solid var(--rr2-accent-soft); outline: 1px solid rgba(202,209,221,.15); outline-offset: 2px; background: #222730; color: var(--rr2-accent); font-size: 17px; }
 /* Quest cards */
 .rr2-quest-summary { display: grid; grid-template-columns: 1.2fr repeat(2, .6fr); gap: 11px; margin-bottom: 17px; }

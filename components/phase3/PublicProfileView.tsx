@@ -320,19 +320,38 @@ export function PublicProfileView({
                 className="rr2-loadout-chip"
                 data-rarity={publicProfile.equipped_cosmetic.rarity}
               >
-                <CosmeticArt
-                  slug={publicProfile.equipped_cosmetic.preview_value}
-                  rarity={publicProfile.equipped_cosmetic.rarity}
-                  composition={cosmeticVisual(publicProfile.equipped_cosmetic.preview_value).composition}
-                  exclusive={publicProfile.equipped_cosmetic.is_exclusive}
-                  size="chip"
-                />
+                {publicProfile.equipped_cosmetic.preview_value === 'root-cipher' ? (
+                  <div className="rr2-loadout-cipher-frame" aria-hidden="true">
+                    <RootCipherFrame
+                      quality="high"
+                      pixelRatio={2}
+                      maxPixelRatio={3}
+                      intensity={0.8}
+                      avatarUrl={publicProfile.avatar_url}
+                      avatarInitial={displayName.slice(0, 1).toUpperCase()}
+                    />
+                  </div>
+                ) : (
+                  <CosmeticArt
+                    slug={publicProfile.equipped_cosmetic.preview_value}
+                    rarity={publicProfile.equipped_cosmetic.rarity}
+                    composition={cosmeticVisual(publicProfile.equipped_cosmetic.preview_value).composition}
+                    exclusive={publicProfile.equipped_cosmetic.is_exclusive}
+                    size="chip"
+                  />
+                )}
                 <span>
                   <strong>{publicProfile.equipped_cosmetic.name}</strong>
-                  {cosmeticKindLabel(publicProfile.equipped_cosmetic.cosmetic_type)}
+                  <small>{cosmeticKindLabel(publicProfile.equipped_cosmetic.cosmetic_type)}</small>
                   <RarityBadge
                     rarity={publicProfile.equipped_cosmetic.rarity}
                     exclusive={publicProfile.equipped_cosmetic.is_exclusive}
+                    label={
+                      publicProfile.equipped_cosmetic.preview_value === 'root-cipher'
+                        ? 'Creator'
+                        : undefined
+                    }
+                    creatorTier={publicProfile.equipped_cosmetic.preview_value === 'root-cipher'}
                     compact
                   />
                 </span>

@@ -238,6 +238,7 @@ function CosmeticCard({
     <article
       className={`p4-card${isEquipped ? ' is-equipped' : ''}${cosmetic.isExclusive ? ' is-exclusive' : ''}`}
       data-rarity={cosmetic.rarity}
+      data-cosmetic={cosmetic.previewValue}
     >
       <button
         type="button"
@@ -261,18 +262,27 @@ function CosmeticCard({
             size="card"
           />
         )}
-        <span className="p4-card-flag p4-card-flag--rarity" data-rarity={cosmetic.rarity}>
-          {RARITY_META[cosmetic.rarity].label}
+        <span
+          className={`p4-card-flag p4-card-flag--rarity${isCipher ? ' p4-card-flag--creator-tier' : ''}`}
+          data-rarity={cosmetic.rarity}
+        >
+          {isCipher ? 'CREATOR' : RARITY_META[cosmetic.rarity].label}
         </span>
         {isEquipped ? <span className="p4-card-flag p4-card-flag--equipped">EQUIPPED</span> : null}
-        {cosmetic.isExclusive ? (
+        {cosmetic.isExclusive && !isCipher ? (
           <span className="p4-card-flag p4-card-flag--creator">CREATOR</span>
         ) : null}
       </button>
 
       <div className="p4-card-body">
         <div className="p4-card-meta">
-          <RarityBadge rarity={cosmetic.rarity} exclusive={cosmetic.isExclusive} compact />
+          <RarityBadge
+            rarity={cosmetic.rarity}
+            exclusive={cosmetic.isExclusive}
+            label={cosmetic.previewValue === 'root-cipher' ? 'Creator' : undefined}
+            creatorTier={cosmetic.previewValue === 'root-cipher'}
+            compact
+          />
           <span className="p4-card-category">{cosmetic.category}</span>
         </div>
 

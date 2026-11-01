@@ -567,7 +567,18 @@ function ProfileView({
                       key={`${item.name}-${item.kind}`}
                       data-rarity={item.rarity}
                     >
-                      {item.cosmeticId ? (
+                      {item.cosmeticId === 'root-cipher' ? (
+                        <div className="rr2-loadout-cipher-frame" aria-hidden="true">
+                          <RootCipherFrame
+                            quality="high"
+                            pixelRatio={2}
+                            maxPixelRatio={3}
+                            intensity={0.8}
+                            avatarUrl={profile.avatarUrl}
+                            avatarInitial={profile.avatarInitial}
+                          />
+                        </div>
+                      ) : item.cosmeticId ? (
                         <CosmeticArt
                           slug={item.cosmeticId}
                           rarity={item.rarity ?? 'common'}
@@ -581,8 +592,16 @@ function ProfileView({
                       )}
                       <span>
                         <strong>{item.name}</strong>
-                        {item.kind}
-                        {item.rarity ? <RarityBadge rarity={item.rarity} compact /> : null}
+                        <small>{item.kind}</small>
+                        {item.rarity ? (
+                          <RarityBadge
+                            rarity={item.rarity}
+                            exclusive={item.cosmeticId === 'root-cipher'}
+                            label={item.cosmeticId === 'root-cipher' ? 'Creator' : undefined}
+                            creatorTier={item.cosmeticId === 'root-cipher'}
+                            compact
+                          />
+                        ) : null}
                       </span>
                     </div>
                   ))}

@@ -103,19 +103,23 @@ export function RarityBadge({
   rarity,
   exclusive = false,
   compact = false,
+  label,
+  creatorTier = false,
 }: {
   rarity: CosmeticRarity;
   exclusive?: boolean;
   compact?: boolean;
+  label?: string;
+  creatorTier?: boolean;
 }) {
   const meta = rarityMeta(rarity);
   return (
     <span
-      className={`p4-rarity p4-rarity--${meta.id}${exclusive ? ' is-exclusive' : ''}${compact ? ' is-compact' : ''}`}
+      className={`p4-rarity p4-rarity--${meta.id}${exclusive ? ' is-exclusive' : ''}${creatorTier ? ' is-creator-tier' : ''}${compact ? ' is-compact' : ''}`}
       data-rarity={meta.id}
     >
       <i aria-hidden="true" />
-      {exclusive ? 'Creator Exclusive' : meta.label}
+      {label ?? (exclusive ? 'Creator Exclusive' : meta.label)}
     </span>
   );
 }

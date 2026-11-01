@@ -154,6 +154,7 @@ export function InspectDialog({
         aria-modal="true"
         aria-labelledby="p4-inspect-title"
         data-rarity={cosmetic.rarity}
+        data-cosmetic={cosmetic.previewValue}
         onClick={(event) => event.stopPropagation()}
       >
         <button
@@ -207,7 +208,12 @@ export function InspectDialog({
 
         <div className="p4-inspect-body">
           <div className="p4-inspect-meta">
-            <RarityBadge rarity={cosmetic.rarity} exclusive={cosmetic.isExclusive} />
+            <RarityBadge
+              rarity={cosmetic.rarity}
+              exclusive={cosmetic.isExclusive}
+              label={isCipher ? 'Creator' : undefined}
+              creatorTier={isCipher}
+            />
             <span className="p4-inspect-category">{cosmetic.category}</span>
             <span className="p4-inspect-slot">{cosmetic.kind}</span>
           </div>

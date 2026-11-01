@@ -465,7 +465,8 @@
 .p4-rarity[data-rarity="epic"] { --p4-rarity: #b07cff; }
 .p4-rarity[data-rarity="legendary"] { --p4-rarity: #ffbf4d; }
 .p4-rarity[data-rarity="mythical"] { --p4-rarity: #ff5c8a; }
-.p4-rarity.is-exclusive {
+.p4-rarity.is-exclusive,
+.p4-rarity.is-creator-tier {
   --p4-rarity: #ffe6a8;
   background: linear-gradient(90deg, rgba(255, 230, 168, 0.14), rgba(139, 233, 208, 0.14));
   animation: p4-crest-shimmer 3.4s ease-in-out infinite;
@@ -611,7 +612,7 @@
   /* The artwork's ornate ring frames a 71%×64% window, versus Graphite's
      84%×83%. Scale the profile avatar up so the opening reads the same size
      as Graphite's; the ornament tips stay inside the unmasked aura bleed. */
-  --rc-frame-scale: 1.23;
+  --rc-frame-scale: 1.60;
 }
 /* The shared profile styles size every avatar <img> to 100%; the Creator frame
    needs the portrait tucked into the supplied artwork's inner window. */
@@ -680,6 +681,8 @@
   z-index: 3;
   pointer-events: none;
   background: var(--p4-frame-img) center / 100% 100% no-repeat;
+  transform: scale(1.4);
+  transform-origin: center;
 }
 /* Silverline's artwork carries a slightly larger transparent lip at the top
    and bottom than Graphite's, which reads as a hairline gap. Crop just that
@@ -694,6 +697,8 @@
   width: 85%;
   height: 85%;
   object-fit: cover;
+  transform: scale(1.4);
+  transform-origin: center;
 }
 .rr2-root .rr2-profile-avatar[data-cosmetic="graphite"]::after,
 .rr2-root .rr2-profile-avatar[data-cosmetic="silverline"]::after {
@@ -765,7 +770,6 @@
   letter-spacing: 0.08em;
 }
 .p4-inspect-cipher-reveal { margin-top: 2px; }
-.rr2-cipher-reveal { align-self: flex-start; margin-top: 6px; }
 
 @keyframes p4-avatar-pulse {
   0%, 100% { box-shadow: 0 0 0 4px var(--p4-glow), 0 0 20px var(--p4-glow); }
@@ -1282,6 +1286,7 @@
 .p4-card[data-rarity="epic"] { --p4-card: #b07cff; }
 .p4-card[data-rarity="legendary"] { --p4-card: #ffbf4d; }
 .p4-card[data-rarity="mythical"] { --p4-card: #ff5c8a; }
+.p4-card[data-cosmetic="root-cipher"] { --p4-card: #ffe6a8; }
 .p4-card.is-equipped { box-shadow: 0 0 0 1px var(--rr2-line-bright), 0 0 24px rgba(202, 209, 221, 0.08); }
 .p4-card.is-exclusive { background: linear-gradient(180deg, rgba(255, 230, 168, 0.05), rgba(20, 23, 29, 0.8) 40%); }
 
@@ -1308,6 +1313,11 @@
   border: 1px solid var(--rr2-line);
 }
 .p4-card-flag--rarity { color: var(--p4-card, #a7b0bd); border-color: currentColor; }
+.p4-card-flag--creator-tier {
+  color: #1a1408;
+  border-color: #ffe6a8;
+  background: linear-gradient(90deg, #ffe6a8, #8be9d0);
+}
 .p4-card-flag--equipped {
   left: auto;
   right: 10px;
@@ -1362,6 +1372,7 @@
 .p4-card-status strong[data-rarity="epic"] { color: #c6a6ff; }
 .p4-card-status strong[data-rarity="legendary"] { color: #ffcf70; }
 .p4-card-status strong[data-rarity="mythical"] { color: #ff86ac; }
+.p4-card[data-cosmetic="root-cipher"] .p4-card-status strong[data-rarity="mythical"] { color: #ffe6a8; }
 .p4-card-foot .rr2-button { flex: 0 0 auto; }
 .p4-card-inspect {
   align-self: flex-start;
@@ -1481,6 +1492,7 @@
 .p4-inspect-status strong[data-rarity="epic"] { color: #c6a6ff; }
 .p4-inspect-status strong[data-rarity="legendary"] { color: #ffcf70; }
 .p4-inspect-status strong[data-rarity="mythical"] { color: #ff86ac; }
+.p4-inspect[data-cosmetic="root-cipher"] .p4-inspect-status strong[data-rarity="mythical"] { color: #ffe6a8; }
 .p4-inspect-actions { display: flex; align-items: center; gap: 8px; }
 .p4-inspect-actions .rr2-button { pointer-events: none; }
 
