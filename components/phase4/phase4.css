@@ -1113,6 +1113,11 @@
   height: 100%;
   aspect-ratio: 1 / 1;
 }
+/* `CosmeticArt` merges its p4-art size classes onto the Wraithlight frame
+   element. The generic `.wl-frame` width:100% would otherwise stretch the
+   fixed chip/thumb tiles into a wide strip, so restore their square sizes. */
+.wl-frame.p4-art--chip { width: 40px; height: 40px; }
+.wl-frame.p4-art--thumb { width: 46px; height: 46px; }
 .wl-avatar,
 .wl-fallback,
 .wl-canvas {
