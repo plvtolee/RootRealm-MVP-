@@ -12,6 +12,7 @@ import {
 import type { PublicProfileData, ConnectionUIStatus } from './types';
 import { CosmeticArt, RarityBadge } from '@/components/phase4/CosmeticArt';
 import { RootCipherFrame } from '@/components/phase4/RootCipherFrame';
+import { WraithlightFrame } from '@/components/phase4/WraithlightFrame';
 import { cosmeticVisual } from '@/lib/cosmetics/visuals';
 import './Phase3.css';
 
@@ -176,6 +177,7 @@ export function PublicProfileView({
   const xpProgress = Math.round((xpIntoLevel / xpForNextLevel) * 100);
   const displayName = publicProfile.display_name || publicProfile.username;
   const isCipher = publicProfile.equipped_cosmetic?.preview_value === 'root-cipher';
+  const isWraithlight = publicProfile.equipped_cosmetic?.preview_value === 'wraithlight';
 
   return (
     <div className="rr2-root rr2-public-profile-root">
@@ -216,6 +218,13 @@ export function PublicProfileView({
                 autoShowcase
                 avatarUrl={publicProfile.avatar_url}
                 avatarInitial={displayName.slice(0, 1).toUpperCase()}
+              />
+            ) : isWraithlight ? (
+              <WraithlightFrame
+                className="wl-frame--profile"
+                avatarUrl={publicProfile.avatar_url}
+                avatarInitial={displayName.slice(0, 1).toUpperCase()}
+                label={`Avatar for ${displayName} with Wraithlight equipped`}
               />
             ) : publicProfile.avatar_url ? (
               <img src={publicProfile.avatar_url} alt="" />
@@ -338,6 +347,8 @@ export function PublicProfileView({
                     composition={cosmeticVisual(publicProfile.equipped_cosmetic.preview_value).composition}
                     exclusive={publicProfile.equipped_cosmetic.is_exclusive}
                     size="chip"
+                    portraitUrl={isWraithlight ? publicProfile.avatar_url : undefined}
+                    portraitInitial={isWraithlight ? displayName.slice(0, 1).toUpperCase() : undefined}
                   />
                 )}
                 <span>

@@ -260,6 +260,7 @@ function CosmeticCard({
             composition={cosmetic.composition}
             exclusive={cosmetic.isExclusive}
             size="card"
+            paused={paused}
           />
         )}
         <span

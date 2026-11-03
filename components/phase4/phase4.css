@@ -404,20 +404,18 @@
   -webkit-mask-position: center;
   -webkit-mask-repeat: no-repeat;
 }
-/* Ember Index's painting is an obsidian border around a ~77% opening. Its
-   opaque square fills ~94% of the asset, so the shop renders the whole frame
-   at 0.9x to sit alongside the other painted frames (Ledgerline/Aurum) rather
-   than oversized. The portrait and its mask scale together so the opening
-   stays aligned, and the corner shards lap over the avatar. */
-.p4-art[data-cosmetic="ember-index"][data-frame="true"] .p4-art-frame-image {
-  transform: scale(0.9);
+/* Ember Index's painting is an obsidian border around a ~77% opening. Render
+   the art at its natural size so the frame fills the card alongside the other
+   painted frames. Scale the portrait with it to keep the masked opening aligned. */
+.p4-art--card[data-cosmetic="ember-index"][data-frame="true"] .p4-art-frame-image {
+  transform: scale(1);
   transform-origin: center;
 }
-.p4-art[data-cosmetic="ember-index"][data-frame="true"] .p4-art-portrait {
+.p4-art--card[data-cosmetic="ember-index"][data-frame="true"] .p4-art-portrait {
   inset: 5.4% auto auto 5.4%;
   width: 89.1%;
   height: 89.1%;
-  transform: scale(0.9);
+  transform: scale(1);
   transform-origin: center;
   filter: none;
   box-shadow: none;
@@ -1095,7 +1093,101 @@
 .rc-canvas { z-index: 3; pointer-events: none; }
 
 .rc-frame--card { width: 100%; }
+.p4-card[data-cosmetic="root-cipher"] .rc-frame--card { --rc-frame-scale: 1; }
 .rc-frame--inspect { width: 100%; max-width: 260px; margin-inline: auto; }
+
+/* Wraithlight's original transparent square and its rendered animation share
+   one canvas. The portrait sits in the wreath opening underneath that art. */
+.wl-frame {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: visible;
+  isolation: isolate;
+}
+.wl-frame--profile {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+}
+.wl-avatar,
+.wl-fallback,
+.wl-canvas {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+}
+.wl-avatar {
+  z-index: 1;
+  left: 25%;
+  top: 25%;
+  width: 50%;
+  height: 50%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.wl-avatar-initial {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 30%, #29334b, #101522 72%);
+  color: #dce9ff;
+  font-size: 44%;
+  font-weight: 700;
+  line-height: 1;
+}
+.wl-fallback,
+.wl-canvas {
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.wl-fallback { transition: opacity 0.2s ease; }
+.wl-frame[data-ready="true"] .wl-fallback { opacity: 0; }
+.wl-canvas { z-index: 3; }
+
+.rr2-root .rr2-profile-avatar[data-cosmetic="wraithlight"] {
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+  animation: none;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="wraithlight"]::before,
+.rr2-root .rr2-profile-avatar[data-cosmetic="wraithlight"]::after { display: none; }
+
+/* The generic `.rr2-profile-avatar img` rule stretches every image to the
+   full box. Wraithlight's portrait is a centred circle inside the wreath, and
+   the fallback must keep the artwork's square corners, so re-scope them here. */
+.rr2-root .rr2-profile-avatar[data-cosmetic="wraithlight"] .wl-avatar {
+  left: 25%;
+  top: 25%;
+  width: 50%;
+  height: 50%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="wraithlight"] .wl-fallback {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  object-fit: contain;
+}
+.rr2-root .rr2-profile-avatar[data-cosmetic="wraithlight"] .wl-canvas {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
 
 .p4-release-featured-note {
   color: #ffe6a8;

@@ -130,6 +130,7 @@ export function ReleaseBanner({
                   composition={item.composition}
                   exclusive={item.isExclusive}
                   size="thumb"
+                  paused={featuredPaused}
                 />
                 <span>{item.name}</span>
               </button>

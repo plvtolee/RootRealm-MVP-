@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 24" width="40" height="24">
+  <defs>
+    <linearGradient id="leafFill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eef4ff"/>
+      <stop offset=".55" stop-color="#a9b8d4"/>
+      <stop offset="1" stop-color="#5d6a88"/>
+    </linearGradient>
+  </defs>
+  <!-- Pale wraith leaf: silver-blue body, faint gilded edge (matches frame foliage) -->
+  <path d="M2 12 C10 2 26 1 38 11 C27 21 11 22 2 12 Z" fill="url(#leafFill)" stroke="#c9a96a" stroke-width=".8" stroke-opacity=".7"/>
+  <path d="M3 12 C14 11 26 11 37 11" stroke="#3e4760" stroke-width=".8" fill="none" opacity=".7"/>
+  <path d="M12 11.6 L16 6.5 M18 11.4 L22 5.5 M24 11.2 L28 6.5 M12 12 L16 17 M18 12 L22 18 M24 11.6 L28 16.5" stroke="#3e4760" stroke-width=".5" fill="none" opacity=".5"/>
+</svg>

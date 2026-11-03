@@ -5,6 +5,7 @@ import type { CosmeticAction, RootRealmCosmetic } from '@/components/phase2/type
 import { RARITY_META, rarityMeta } from '@/lib/cosmetics/rarity';
 import { CosmeticArt, RarityBadge } from './CosmeticArt';
 import { RootCipherFrame, type RootCipherFrameHandle } from './RootCipherFrame';
+import { WraithlightFrame } from './WraithlightFrame';
 
 interface InspectDialogProps {
   cosmetic: RootRealmCosmetic;
@@ -81,6 +82,7 @@ export function InspectDialog({
   const affordable = codeCoins >= cosmetic.cost;
   const effects = effectsFor(cosmetic);
   const isCipher = cosmetic.previewValue === 'root-cipher';
+  const isWraithlight = cosmetic.previewValue === 'wraithlight';
 
   const statusLabel = owned
     ? cosmetic.action === 'equipped'
@@ -249,6 +251,13 @@ export function InspectDialog({
                     intensity={0.9}
                     avatarUrl={profile.avatarUrl}
                     avatarInitial={profile.initial}
+                  />
+                ) : isWraithlight ? (
+                  <WraithlightFrame
+                    avatarUrl={profile.avatarUrl}
+                    avatarInitial={profile.initial}
+                    className="wl-frame--profile"
+                    label={`${profile.name} with ${cosmetic.name} equipped`}
                   />
                 ) : profile.avatarUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element

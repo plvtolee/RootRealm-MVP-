@@ -2,6 +2,7 @@ import type { CosmeticComposition, CosmeticRarity } from '@/lib/types';
 import { rarityMeta } from '@/lib/cosmetics/rarity';
 import { cosmeticVisual } from '@/lib/cosmetics/visuals';
 import { MotifArtwork } from './motifs';
+import { WraithlightFrame } from './WraithlightFrame';
 
 export type CosmeticArtSize = 'thumb' | 'chip' | 'card' | 'inspect' | 'hero';
 
@@ -15,6 +16,7 @@ interface CosmeticArtProps {
   portraitInitial?: string;
   exclusive?: boolean;
   className?: string;
+  paused?: boolean;
   /** Accessible label; when omitted the artwork is decorative. */
   label?: string;
 }
@@ -36,12 +38,25 @@ export function CosmeticArt({
   portraitInitial,
   exclusive = false,
   className,
+  paused = false,
   label,
 }: CosmeticArtProps) {
   const visual = cosmeticVisual(slug);
   const resolvedComposition = composition ?? visual.composition;
   const hasPortrait = Boolean(portraitUrl || portraitInitial);
   const classes = ['p4-art', `p4-art--${size}`, className].filter(Boolean).join(' ');
+
+  if (visual.slug === 'wraithlight') {
+    return (
+      <WraithlightFrame
+        avatarUrl={portraitUrl}
+        avatarInitial={portraitInitial}
+        paused={paused}
+        className={classes}
+        label={label}
+      />
+    );
+  }
 
   return (
     <div

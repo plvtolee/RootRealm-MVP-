@@ -49,6 +49,7 @@ describe('Phase 4 cosmetic visuals', () => {
     expect(cosmeticComposition('frostbound')).toBe('circle');
     expect(cosmeticComposition('root-cipher')).toBe('square');
     expect(cosmeticComposition('astral-horizon')).toBe('full');
+    expect(cosmeticComposition('wraithlight')).toBe('circle');
   });
 
   it('falls back safely for unknown slugs', () => {
@@ -60,6 +61,7 @@ describe('Phase 4 cosmetic visuals', () => {
     expect(cosmeticFrame('graphite')).toBe('/cosmetics/graphite-halo.png');
     expect(cosmeticFrame('silverline')).toBe('/cosmetics/silverline-frame.png');
     expect(cosmeticFrame('root-cipher')).toBe('/cosmetics/root-cipher/root-cipher-frame.png');
+    expect(cosmeticFrame('wraithlight')).toBe('/cosmetics/wraithlight/wraithlight-frame.png');
     for (const visual of Object.values(COSMETIC_VISUALS)) {
       if (visual.frame) {
         expect(visual.frame).toMatch(/^\/cosmetics\/(?:[a-z0-9-]+\/)?[a-z0-9-]+\.png$/);
@@ -75,6 +77,7 @@ describe('Phase 4 release banner config', () => {
     for (const slug of FEATURED_RELEASE.previewSlugs) {
       expect(COSMETIC_VISUALS[slug]).toBeDefined();
     }
+    expect(FEATURED_RELEASE.previewSlugs).toContain('wraithlight');
     // No genuine release deadline exists, so the banner must not show one.
     expect(FEATURED_RELEASE.endsAt ?? null).toBeNull();
   });

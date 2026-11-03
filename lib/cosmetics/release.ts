@@ -44,7 +44,7 @@ export const FEATURED_RELEASE: CosmeticRelease = {
   // presentation, and the spotlight config points at the same artefact.
   featuredSlug: 'root-cipher',
   spotlightSlug: 'root-cipher',
-  previewSlugs: ['graphite', 'frostbound', 'neon-pulse', 'solar-crown', 'astral-horizon'],
+  previewSlugs: ['graphite', 'frostbound', 'solar-crown', 'astral-horizon', 'wraithlight'],
   startsAt: null,
   endsAt: null,
 };

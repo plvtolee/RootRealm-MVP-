@@ -5,6 +5,7 @@ import { LocalTime } from '@/components/local-time';
 import { ShopView as Phase4ShopView } from '@/components/phase4/ShopView';
 import { CosmeticArt, RarityBadge } from '@/components/phase4/CosmeticArt';
 import { RootCipherFrame } from '@/components/phase4/RootCipherFrame';
+import { WraithlightFrame } from '@/components/phase4/WraithlightFrame';
 import type {
   CosmeticAction,
   Phase2Feedback,
@@ -291,6 +292,7 @@ function ProfileView({
     Math.round((profile.xpIntoLevel / Math.max(profile.xpForNextLevel, 1)) * 100)
   );
   const isCipher = profile.avatarFrameId === 'root-cipher';
+  const isWraithlight = profile.avatarFrameId === 'wraithlight';
   const loadoutLabel = isCipher
     ? 'THE ROOT CIPHER · CREATOR EXCLUSIVE'
     : profile.loadout[0] && profile.loadout[0].name !== 'Default frame'
@@ -353,6 +355,13 @@ function ProfileView({
               autoShowcase
               avatarUrl={profile.avatarUrl}
               avatarInitial={profile.avatarInitial}
+            />
+          ) : isWraithlight ? (
+            <WraithlightFrame
+              className="wl-frame--profile"
+              avatarUrl={profile.avatarUrl}
+              avatarInitial={profile.avatarInitial}
+              label={`${profile.name} with Wraithlight equipped`}
             />
           ) : profile.avatarUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -584,6 +593,8 @@ function ProfileView({
                           rarity={item.rarity ?? 'common'}
                           composition={item.composition}
                           size="chip"
+                          portraitUrl={item.cosmeticId === 'wraithlight' ? profile.avatarUrl : undefined}
+                          portraitInitial={item.cosmeticId === 'wraithlight' ? profile.avatarInitial : undefined}
                         />
                       ) : (
                         <span className="rr2-cosmetic-art" aria-hidden="true">
