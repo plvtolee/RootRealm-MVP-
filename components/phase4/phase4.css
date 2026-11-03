@@ -1167,11 +1167,19 @@
 /* The generic `.rr2-profile-avatar img` rule stretches every image to the
    full box. Wraithlight's portrait is a centred circle inside the wreath, and
    the fallback must keep the artwork's square corners, so re-scope them here. */
+/* Match the Creator frame's profile presentation: scale the whole wreath up
+   1.6x so it reads at the same footprint as Root Cipher, then give the
+   portrait the same 68.8% window. The portrait stays centred and tucks behind
+   the top/bottom branches of the wreath. */
+.rr2-root .rr2-profile-avatar[data-cosmetic="wraithlight"] .wl-frame--profile {
+  transform: scale(1.6);
+  transform-origin: center;
+}
 .rr2-root .rr2-profile-avatar[data-cosmetic="wraithlight"] .wl-avatar {
-  left: 21%;
-  top: 21%;
-  width: 58%;
-  height: 58%;
+  left: 15.6%;
+  top: 15.6%;
+  width: 68.8%;
+  height: 68.8%;
   border-radius: 50%;
   object-fit: cover;
 }
